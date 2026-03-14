@@ -1,5 +1,8 @@
 package com.example.BackendDineMeNow.Dtos;
 
+import com.example.BackendDineMeNow.models.Direccion;
+import com.example.BackendDineMeNow.models.Documento;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,11 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UsuarioDto {
+public class ClienteDto {
     //FrontEnd
     private String id;
     private String nombre;
     private String apellido;
+    private Documento documento;
+    private Direccion direccion;
     private String email;
 
 }

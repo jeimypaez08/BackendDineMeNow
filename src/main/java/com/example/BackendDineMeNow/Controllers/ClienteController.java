@@ -2,8 +2,9 @@ package com.example.BackendDineMeNow.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.BackendDineMeNow.Dtos.UsuarioDto;
-import com.example.BackendDineMeNow.Services.UsuarioService;
+import com.example.BackendDineMeNow.Dtos.ClienteDto;
+import com.example.BackendDineMeNow.Dtos.ClienteRegistroDto;
+import com.example.BackendDineMeNow.Services.ClienteService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,30 +24,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping("/UserController")
-public class UsuarioController {
-    private final UsuarioService usuarioService;
+@RequestMapping("/ClienteController")
+public class ClienteController {
+    private final ClienteService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public ClienteController(ClienteService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
     //Crear un usuario
     @PostMapping("/crear")
-    public ResponseEntity<UsuarioDto> createUser(@RequestBody UsuarioDto usuarioDto) {
-        UsuarioDto creando = usuarioService.crearUser(usuarioDto);
+    public ResponseEntity<ClienteDto> createUser(@RequestBody ClienteDto usuarioDto) {
+        ClienteDto creando = usuarioService.crearUser(usuarioDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creando);
     }
 
     //Lista usuarios
     @GetMapping("/List")
-    public ResponseEntity<List<UsuarioDto>> obtenerUsers() {
+    public ResponseEntity<List<ClienteDto>> obtenerUsers() {
         return ResponseEntity.ok(usuarioService.ListaUsers());
     }
 
     //Actualiza usuario
     @PutMapping("/Update/{id}")
-    public ResponseEntity<UsuarioDto> actualizar(@PathVariable String id, @RequestBody UsuarioDto usuarioDto) {
+    public ResponseEntity<ClienteDto> actualizar(@PathVariable String id, @RequestBody ClienteDto usuarioDto) {
         return ResponseEntity.ok(usuarioService.actUser(id, usuarioDto));
     }
 
@@ -56,6 +57,14 @@ public class UsuarioController {
         usuarioService.borrarUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    //Registrar con encryp ???
+    @PostMapping("/Registrar")
+    public ResponseEntity<ClienteRegistroDto> register(@RequestBody ClienteRegistroDto usuarioRegistroDto) {
+        ClienteRegistroDto crear = usuarioService.registerUser(usuarioRegistroDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(crear);
+    }
+    
     
     
 
