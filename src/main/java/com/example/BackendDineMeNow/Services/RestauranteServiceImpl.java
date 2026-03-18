@@ -35,7 +35,7 @@ public List<RestauranteDto> ListRestaurante(){
 public RestauranteDto actualizarRestaurante(String id, RestauranteDto restauranteDto){
   Restaurante restaurante = restauranteRepository.findById(id)
     .orElseThrow(() -> new RuntimeException("Id de restaurante no encontrado, id: " + id));
-    restauranteMapper.actualizarRestaurante(RestauranteDto restauranteDto);
+    restauranteMapper.actualizarRestaurante(restauranteDto, restaurante);
     return restauranteMapper.toRestauranteDto(restauranteRepository.save(restaurante));  
 }
 //Eliminar
