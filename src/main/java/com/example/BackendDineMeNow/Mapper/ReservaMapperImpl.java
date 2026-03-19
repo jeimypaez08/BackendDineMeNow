@@ -24,7 +24,7 @@ public class ReservaMapperImpl implements ReservaMapper{
                 .fecha(reservaDto.getFecha())
                 .hora(reservaDto.getHora())
                 .descrip(reservaDto.getDescripcion())
-                .estado(reservaDto.getEstado())
+                .estado(Boolean.parseBoolean(reservaDto.getEstado()))
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class ReservaMapperImpl implements ReservaMapper{
                 .fecha(reserva.getFecha())
                 .hora(reserva.getHora())
                 .descripcion(reserva.getDescrip())
-                .estado(reserva.getEstado())
+                .estado(String.valueOf(reserva.isEstado()))
                 .build();
     }
 
@@ -65,14 +65,13 @@ public class ReservaMapperImpl implements ReservaMapper{
         if (reservaDto == null) {
             throw new IllegalArgumentException("El dto de la reserva esta vacio");
         }
-
+        
         //Actualizar la entidad
-        reserva.setId_Cliente(reservaDto.getId_Cliente());
         reserva.setId_Platos(reservaDto.getId_Platos());
         reserva.setId_Mesa(reservaDto.getId_Mesa());
         reserva.setFecha(reservaDto.getFecha());
         reserva.setHora(reservaDto.getHora());
         reserva.setDescrip(reservaDto.getDescripcion());
-        reserva.setEstado(reservaDto.getEstado());
+        reserva.setEstado(Boolean.parseBoolean(reservaDto.getEstado()));
     }
 }
