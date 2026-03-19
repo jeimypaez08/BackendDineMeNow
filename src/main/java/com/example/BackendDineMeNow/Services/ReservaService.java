@@ -12,8 +12,6 @@ public interface ReservaService {
 
     ReservaDto actReserva(String id, ReservaDto reservaDto);
 
-        void borrarReserva(String id);
-
-        ReservaDto obtenerReservaPorId(String id);
+    void borrarReserva(String id);
 
 }
