@@ -1,8 +1,5 @@
 package com.example.BackendDineMeNow.models;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,20 +8,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "Reserva")
+
+@Document(collection = "mesas")
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Reserva {
-    //BackEnd
+
+public class Mesa {
     @Id
     private String id;
-    private String id_Cliente;
-    private String id_Platos;
-    private String id_Mesa;
-    private LocalDate fecha;
-    private LocalTime hora;
-    private String descrip;
-    private boolean estado;
+    private String num_mesa;
+    private int capacidad; // numero de personas que pueden sentarse en la mesa
+    private boolean estado; //mesa está disponible para reservar o no
+
 }
