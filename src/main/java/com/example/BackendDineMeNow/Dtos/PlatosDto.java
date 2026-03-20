@@ -1,5 +1,9 @@
 package com.example.BackendDineMeNow.Dtos;
 
+import java.util.List;
+
+import com.example.BackendDineMeNow.models.Categorias;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +19,5 @@ public class PlatosDto {
     private String nombre;
     private String descripcion;
     private double precio;
+    private List<Categorias> categoria;
 }
