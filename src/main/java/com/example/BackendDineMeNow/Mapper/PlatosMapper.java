@@ -12,4 +12,6 @@ public interface PlatosMapper {
     PlatosDto toPlatosDto(Platos platos); //Convertir el Platos a PlatosDto 
 
     List<PlatosDto> toPlatosDtoList(List<Platos> platos);
+
+    void actualizarPlatos(PlatosDto platosDto, Platos platos);
 }

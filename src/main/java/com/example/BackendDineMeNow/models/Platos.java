@@ -21,5 +21,5 @@ public class Platos {
     private String nom;
     private String desc;
     private double precio;
-    private List<Categorias> categorias; //Lista de categorias
+    private List<Categorias> categ; //Lista de categorias
 }
