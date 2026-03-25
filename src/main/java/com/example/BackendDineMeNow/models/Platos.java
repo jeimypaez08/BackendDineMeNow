@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Platos {
 //Modelo es para el sistema
 //BackEnd
-    private String id;
+    private String id_platos;
     private String nom;
     private String desc;
     private double precio;
