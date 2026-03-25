@@ -1,4 +1,4 @@
-package com.example.BackendDineMeNow.security;
+/*package com.example.BackendDineMeNow.security;
 
 import java.util.Date;
 
@@ -36,4 +36,4 @@ public class JwtService {
         .getBody()//extraer usuario, obtenemos cuerpo de Jwt
         .getSubject();//extraer nombre de usuario, username
     }
-}
+}*/
