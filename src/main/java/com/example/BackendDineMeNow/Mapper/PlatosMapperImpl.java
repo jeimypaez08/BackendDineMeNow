@@ -10,6 +10,7 @@ import com.example.BackendDineMeNow.models.Platos;
 @Component
 public class PlatosMapperImpl implements PlatosMapper {
 
+
     @Override
     public Platos toPlatos(PlatosDto platosDto) {
         if (platosDto == null) {
@@ -17,7 +18,7 @@ public class PlatosMapperImpl implements PlatosMapper {
         }
 
         return Platos.builder()
-            .id(platosDto.getId())
+            .id_platos(platosDto.getId())
             .nom(platosDto.getNombre())
             .desc(platosDto.getDescripcion())
             .precio(platosDto.getPrecio())
@@ -32,7 +33,7 @@ public class PlatosMapperImpl implements PlatosMapper {
         }
 
         return PlatosDto.builder()
-            .id(platos.getId())
+            .id(platos.getId_platos())
             .nombre(platos.getNom())
             .descripcion(platos.getDesc())
             .precio(platos.getPrecio())

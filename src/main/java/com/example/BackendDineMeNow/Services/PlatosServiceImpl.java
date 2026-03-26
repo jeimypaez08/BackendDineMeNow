@@ -7,44 +7,46 @@ import org.springframework.stereotype.Service;
 import com.example.BackendDineMeNow.Dtos.PlatosDto;
 import com.example.BackendDineMeNow.Mapper.PlatosMapper;
 import com.example.BackendDineMeNow.models.Platos;
-import com.example.BackendDineMeNow.repositories.PlatosRespository;
+import com.example.BackendDineMeNow.repositories.PlatosRepository;;
 
 @Service
-public class PlatosServiceImpl {
+public class PlatosServiceImpl  implements PlatosService {
+private final PlatosRepository platosRepository;
+private final PlatosMapper platosMapper;
+public PlatosServiceImpl(PlatosRepository platosRepository, PlatosMapper platosmapper){
+    this.platosRepository=platosRepository;
+    this.platosMapper=platosmapper;
+}
 
-    private final PlatosRepository platosRepository;
+//Crear un plato
+@Override
+public PlatosDto crearPlatos(PlatosDto platosDto){
+    Platos platos = platosMapper.toPlatos(platosDto);
+    return platosMapper.toPlatosDto(platosRepository.save(platos));
+}
 
-    private final PlatosMapper platosMapper;
+//Listar platos
+@Override
+public List<PlatosDto> ListaPlatos() {
+    return platosMapper.toPlatosDtoList(platosRepository.findAll());
+}
 
-    public PlatosServiceImpl(PlatosRespository platosRespository, PlatosMapper platosMapper){
-        this.platosRepository = platosRespository;
-        this.platosMapper = platosMapper;
-    }
+//Actualizar plato
+@Override
+public PlatosDto actPlatos(String id, PlatosDto platosDto) {
+    Platos platos = platosRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Id de plato no encontrado, id: " + id));
+    platosMapper.actualizarPlatos(platosDto, platos);
+    return platosMapper.toPlatosDto(platosRepository.save(platos));
+}
 
-    // Crear plato
+//Eliminar plato
+@Override
+public void borrarPlatos(String id) {
+if(!platosRepository.existsById(id)){
+    throw new RuntimeException("Id de plato no encontrado, id: " + id);
+}
+platosRepository.deleteById(id);
 
-    @Override
-    public List<PlatosDto> crearPlatos(PlatosDto platosDto){
-        Platos platos = platosMapper.toPlatos(platosDto);
-        return platosMapper.toPlatosDtoList(platosRepository.saveAll(Arrays.asList(platos)));
-    }
-
-    // Actualizar plato
-    @Override
-    public PlatosDto actPlato(String id, PlatosDto platosDto){
-        Platos platos = platosRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Id de plato no encontrado, id: " + id));
-        platosMapper.actualizarPlato(platosDto, platos);
-        return platosMapper.toPlatosDto(platosRepository.save(platos));
-    }
-
-    // Eliminar plato
-    @Override
-    public void borrarPlato(String id){
-        if (!platosRepository.existsById(id)) {
-            throw new RuntimeException("Id de plato no encontrado, id: " + id);
-        }
-        platosRepository.deleteById(id);
-
-    }
+}
 }

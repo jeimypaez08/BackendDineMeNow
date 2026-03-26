@@ -30,7 +30,7 @@ public class PlatosController {
     // Crear plato
     @PostMapping("/crearPlato")
     public ResponseEntity<PlatosDto> crearPlato(@RequestBody PlatosDto platosDto) {
-        PlatosDto creando = platosService.crearPlato(platosDto);
+        PlatosDto creando = platosService.crearPlatos(platosDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creando);
     }
 
@@ -42,7 +42,7 @@ public class PlatosController {
     
     @DeleteMapping("/borrarPlato/{id}")
     public ResponseEntity<Void> borrarPlato(@PathVariable String id) {
-        platosService.borrarPlato(id);
+        platosService.borrarPlatos(id);
         return ResponseEntity.noContent().build();
     }
 
