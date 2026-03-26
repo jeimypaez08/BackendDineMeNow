@@ -9,7 +9,7 @@ public interface PlatosMapper {
 
     Platos toPlatos(PlatosDto platosDto); //Convertir PlatosDto a Platos
 
-    PlatosDto toPlatosDto(Platos platos); //Convertir el Platos a PlatosDto 
+    PlatosDto toPlatosDto(Platos platos); //Convertir el Platos a PlatosDto
 
     List<PlatosDto> toPlatosDtoList(List<Platos> platos);
 

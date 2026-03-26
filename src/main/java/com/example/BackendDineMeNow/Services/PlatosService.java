@@ -6,14 +6,12 @@ import com.example.BackendDineMeNow.Dtos.PlatosDto;
 
 public interface  PlatosService {
 
-    PlatosDto crearPlato(PlatosDto platoDto);
+    PlatosDto crearPlatos(PlatosDto platoDto);
     
     List<PlatosDto> ListaPlatos();
     
-    PlatosDto actPlato(String id, PlatosDto platoDto);
+    PlatosDto actPlatos(String id, PlatosDto platoDto);
 
-    void borrarPlato(String id);
-
-    PlatosDto getPlatoById(String id);
+    void borrarPlatos(String id);
 
 }
