@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "ClienteAth")
+@Document(collection = "clientesAuth")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

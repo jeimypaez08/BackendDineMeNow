@@ -7,13 +7,19 @@ import com.example.BackendDineMeNow.Dtos.ClienteRegistroDto;
 
 public interface ClienteService {
 
-    ClienteDto crearUser(ClienteDto usuarioDto);
+    ClienteRegistroDto registrarCliente(ClienteRegistroDto dto); //registro con auth
 
-    List<ClienteDto> ListaUsers();
+    ClienteDto crearCliente(ClienteDto clienteDto); //solo perfil
 
-    ClienteDto actUser(String id, ClienteDto usuarioDto);
+    List<ClienteDto> listarClientes();
 
-    void borrarUser(String id);
+    ClienteDto obtenerClientePorId(String id); //busqueda interna
 
-    ClienteRegistroDto registerUser(ClienteRegistroDto usuarioRegistroDto);
+    ClienteDto obtenerClientePorDocumento(String numero); //busqueda externa
+ 
+    ClienteDto actualizarCliente(String id, ClienteDto clienteDto);
+
+    void eliminarCliente(String id);
+
+
 }

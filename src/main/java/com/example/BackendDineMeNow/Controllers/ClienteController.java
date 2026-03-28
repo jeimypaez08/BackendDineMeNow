@@ -24,48 +24,53 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping("/ClienteController")
+@RequestMapping("/api/clientes") //Ruta base para el controlador de clientes
 public class ClienteController {
-    private final ClienteService usuarioService;
 
-    public ClienteController(ClienteService usuarioService) {
-        this.usuarioService = usuarioService;
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
-    //Crear un usuario
-    @PostMapping("/crear")
-    public ResponseEntity<ClienteDto> createUser(@RequestBody ClienteDto usuarioDto) {
-        ClienteDto creando = usuarioService.crearUser(usuarioDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creando);
+    // POST api/clientes/registro
+    @PostMapping("/registro")
+    public ResponseEntity<ClienteRegistroDto> registrarCliente(@RequestBody ClienteRegistroDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+        .body(clienteService.registrarCliente(dto));
+}
+
+    // GET api/clientes
+    @GetMapping
+    public ResponseEntity<List<ClienteDto>> listar() {
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
-    //Lista usuarios
-    @GetMapping("/List")
-    public ResponseEntity<List<ClienteDto>> obtenerUsers() {
-        return ResponseEntity.ok(usuarioService.ListaUsers());
+
+    // GET api/clientes/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDto> obtenerPorId(@PathVariable String id) {
+        return ResponseEntity.ok(clienteService.obtenerClientePorId(id));
     }
 
-    //Actualiza usuario
-    @PutMapping("/Update/{id}")
-    public ResponseEntity<ClienteDto> actualizar(@PathVariable String id, @RequestBody ClienteDto usuarioDto) {
-        return ResponseEntity.ok(usuarioService.actUser(id, usuarioDto));
+    @GetMapping("/documento/{numero}")
+public ResponseEntity<ClienteDto> obtenerPorDocumento(@PathVariable String numero) {
+    return ResponseEntity.ok(clienteService.obtenerClientePorDocumento(numero));
+}
+
+    //Actualiza usuario- PUT api/clientes/Update/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteDto> actualizar(@PathVariable String id, @RequestBody ClienteDto dto) {
+        return ResponseEntity.ok(clienteService.actualizarCliente(id, dto));
     }
 
-    //Borrar usuario
-    @DeleteMapping("/Delete/{id}")
+    
+
+    //Borrar usuario- DELETE api/clientes/Delete/{id}
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable String id) {
-        usuarioService.borrarUser(id);
+        clienteService.eliminarCliente(id);
         return ResponseEntity.noContent().build();
     }
-
-    //Registrar con encryp ???
-    @PostMapping("/Registrar")
-    public ResponseEntity<ClienteRegistroDto> register(@RequestBody ClienteRegistroDto usuarioRegistroDto) {
-        ClienteRegistroDto crear = usuarioService.registerUser(usuarioRegistroDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(crear);
-    }
-    
-    
-    
 
 }

@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "Cliente")
+@Document(collection = "clientes")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,10 +17,13 @@ public class Cliente {
     //BackEnd
     @Id
     private String id;
-    private String nom;
-    private String ape;
-    private Documento doc;
-    private Direccion dir;
+    private String nombre;
+    private String apellido;
+    private Documento documento;
+    private Direccion direccion;
     private String correo;
+    private String telefono;
+    private String foto;
+
 
 }
