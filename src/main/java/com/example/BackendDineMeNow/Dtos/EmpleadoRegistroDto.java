@@ -1,10 +1,10 @@
 package com.example.BackendDineMeNow.Dtos;
 
-//import java.util.List;
 
 import com.example.BackendDineMeNow.models.Direccion;
 import com.example.BackendDineMeNow.models.Documento;
 import com.example.BackendDineMeNow.models.Rol;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EmpleadoDto {
-    private String id;
+public class EmpleadoRegistroDto {
     private Documento documento;
     private String nombre;
     private String apellido;
@@ -25,9 +24,13 @@ public class EmpleadoDto {
     private String eps;
     private String arl;
     private Direccion direccion;
-    private Rol rol;
+    private Rol rol; // Enum para definir el rol del empleado (CHEF, MESERO
     private String estado;
     private String foto;
     private String idRestaurante; //Posible objecto
+    private String user;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
 }
