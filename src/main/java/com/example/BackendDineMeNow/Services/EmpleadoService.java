@@ -3,14 +3,20 @@ package com.example.BackendDineMeNow.Services;
 import java.util.List;
 
 import com.example.BackendDineMeNow.Dtos.EmpleadoDto;
+import com.example.BackendDineMeNow.Dtos.EmpleadoRegistroDto;
 
 public interface EmpleadoService {
-    EmpleadoDto crearEmpleado(EmpleadoDto empleadoDto);
+    EmpleadoRegistroDto registrarEmpleado(EmpleadoRegistroDto dto);
 
-    List<EmpleadoDto> ListEmpleados();
+    List<EmpleadoDto> listarEmpleados();
+    List<EmpleadoDto> listarPorRestaurante(String idRestaurante);
 
-    EmpleadoDto actEmpleado(String id, EmpleadoDto empleadoDto);
+    EmpleadoDto obtenerPorId(String id);
+    EmpleadoDto obtenerPorDocumento(String numero);
+    EmpleadoDto actualizarEmpleado(String id, EmpleadoDto dto);
+    EmpleadoDto actualizarPorDocumento(String numero, EmpleadoDto dto);
 
-    void borrarEmpleado(String id);
+    void eliminarEmpleado(String id);
+    void eliminarPorDocumento(String numero);
 
 }

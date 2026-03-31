@@ -1,0 +1,24 @@
+package com.example.BackendDineMeNow.models;
+
+import java.util.List;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Document(collection = "empleados_auth")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class EmpleadoAuth {
+    @Id
+    private String id;
+    private String user;
+    private String pass;
+
+    private List<Rol> roles; //Lista de roles
+
+}
