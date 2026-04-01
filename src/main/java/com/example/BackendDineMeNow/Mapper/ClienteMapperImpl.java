@@ -16,7 +16,7 @@ public class ClienteMapperImpl implements ClienteMapper{
         }
         return Cliente.builder()
             .id(usuarioDto.getId())
-            .nom(usuarioDto.getNombre())
+            .nom(usuarioDto.getNombreCliente())
             .ape(usuarioDto.getApellido())
             .doc(usuarioDto.getDocumento())
             .dir(usuarioDto.getDireccion())
@@ -31,7 +31,7 @@ public class ClienteMapperImpl implements ClienteMapper{
         }
         return ClienteDto.builder()
             .id(usuario.getId())
-            .nombre(usuario.getNom())
+            .nombreCliente(usuario.getNom())
             .apellido(usuario.getApe())
             .documento(usuario.getDoc())
             .direccion(usuario.getDir())
@@ -62,7 +62,7 @@ public class ClienteMapperImpl implements ClienteMapper{
         }
 
         //Actualzar la entidad
-        usuario.setNom(usuarioDto.getNombre());
+        usuario.setNom(usuarioDto.getNombreCliente());
         usuario.setApe(usuarioDto.getApellido());
         usuario.setDoc(usuarioDto.getDocumento());
         usuario.setDir(usuarioDto.getDireccion());

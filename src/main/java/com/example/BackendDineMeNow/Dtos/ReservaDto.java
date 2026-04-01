@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 public class ReservaDto {
     //FrontEnd
     private String id;
-    private String id_Cliente;
-    private String id_Platos;
-    private String id_Mesa;
+    private String nombreCliente;//nombre del cliente que hizo la reserva, se puede cambiar a una referencia al cliente si se desea, telefono o correo para contacto
+    private String nombrePlatos;//nombre del plato reservado, se puede cambiar a una lista si se permite reservar varios platos
+    private String numeroMesa;
     private LocalDate fecha;
     private LocalTime hora;
     private String descripcion;

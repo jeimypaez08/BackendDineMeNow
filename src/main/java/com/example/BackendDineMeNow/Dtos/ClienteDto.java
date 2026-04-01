@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ClienteDto {
     //FrontEnd
     private String id;
-    private String nombre;
+    private String nombreCliente;
     private String apellido;
     private Documento documento;
     private Direccion direccion;

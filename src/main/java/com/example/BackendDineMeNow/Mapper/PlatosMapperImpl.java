@@ -19,7 +19,7 @@ public class PlatosMapperImpl implements PlatosMapper {
 
         return Platos.builder()
             .idplatos(platosDto.getId())
-            .nomPlatos(platosDto.getNombre())
+            .nomPlatos(platosDto.getNombrePlatos())
             .desc(platosDto.getDescripcion())
             .precio(platosDto.getPrecio())
             .categ(platosDto.getCategoria())
@@ -34,7 +34,7 @@ public class PlatosMapperImpl implements PlatosMapper {
 
         return PlatosDto.builder()
             .id(platos.getIdplatos())
-            .nombre(platos.getNomPlatos())
+            .nombrePlatos(platos.getNomPlatos())
             .descripcion(platos.getDesc())
             .precio(platos.getPrecio())
             .categoria(platos.getCateg())
@@ -64,7 +64,7 @@ public class PlatosMapperImpl implements PlatosMapper {
         }
 
         // Actualizar entidad
-        platos.setNomPlatos(platosDto.getNombre());
+        platos.setNomPlatos(platosDto.getNombrePlatos());
         platos.setDesc(platosDto.getDescripcion());
         platos.setPrecio(platosDto.getPrecio());
         platos.setCateg(platosDto.getCategoria());
