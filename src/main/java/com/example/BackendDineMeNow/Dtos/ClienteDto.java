@@ -19,6 +19,8 @@ public class ClienteDto {
     private String apellido;
     private Documento documento;
     private Direccion direccion;
-    private String email;
+    private String correo;
+    private String telefono;
+    private String foto;
 
 }

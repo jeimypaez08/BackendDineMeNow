@@ -9,15 +9,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "clientesAuth")
+@Document(collection = "empleados_auth")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class ClienteAuth {
+public class EmpleadoAuth {
     @Id
     private String id;
     private String user;
     private String pass;
 
     private List<Rol> roles; //Lista de roles
+
 }

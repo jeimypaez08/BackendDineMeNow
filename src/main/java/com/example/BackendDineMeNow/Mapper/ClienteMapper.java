@@ -6,12 +6,12 @@ import com.example.BackendDineMeNow.Dtos.ClienteDto;
 import com.example.BackendDineMeNow.models.Cliente;
 
 public interface ClienteMapper {
-    Cliente toUsuario(ClienteDto usuarioDto); //Convertir UsuarioDto a Usuario
+    Cliente toCliente(ClienteDto clienteDto); //Convertir ClienteDto a Cliente
 
-    ClienteDto toUsuarioDto(Cliente usuario); //Convertir el Usuario a usuarioDto
+    ClienteDto toClienteDto(Cliente cliente); //Convertir el Cliente a clienteDto
 
-    List<ClienteDto> toUsuarioDtoList(List<Cliente> usuarios);
+    List<ClienteDto> toClienteDtoList(List<Cliente> clientes);
 
-    void actualizarUser(ClienteDto usuarioDto, Cliente usuario);
+    void actualizarCliente(ClienteDto clienteDto, Cliente cliente);
 
 }

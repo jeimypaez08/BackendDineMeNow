@@ -3,24 +3,23 @@ package com.example.BackendDineMeNow.Dtos;
 import java.util.List;
 
 import com.example.BackendDineMeNow.models.Rol;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class ClienteAuthDto {
+public class LoginResponseDto {
+    private String mensaje;
     private String id;
-    private String user;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password; //Solo leer la contra
-
+    private String nombre;
+    private String correo;
     private List<Rol> roles;
+
+
 
 }

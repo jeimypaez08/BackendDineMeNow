@@ -1,10 +1,7 @@
 package com.example.BackendDineMeNow.Dtos;
 
-import java.util.List;
-
 import com.example.BackendDineMeNow.models.Direccion;
 import com.example.BackendDineMeNow.models.Documento;
-import com.example.BackendDineMeNow.models.Rol;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -21,12 +18,13 @@ public class ClienteRegistroDto {
     private String apellido;
     private Documento documento;
     private Direccion direccion;
-    private String email;
+    private String correo;
+    private String telefono;
+    private String foto;
     private String user;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private List<Rol> roles;
 
 }

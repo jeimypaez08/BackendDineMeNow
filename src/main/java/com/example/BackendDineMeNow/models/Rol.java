@@ -1,7 +1,9 @@
 package com.example.BackendDineMeNow.models;
 
 public enum Rol {
-    Rol_Cliente,
-    Rol_Restaurante
+    ROL_CLIENTE,
+    ROL_RESTAURANTE,
+    ROL_CHEF,
+    ROL_MESERO
 
 }
