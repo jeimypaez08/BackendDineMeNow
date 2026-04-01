@@ -20,9 +20,9 @@ public class Reserva {
     //BackEnd
     @Id
     private String id;
-    private String id_Cliente;
-    private String id_Platos;
-    private String id_Mesa;
+    private String nombreCliente;
+    private String nombrePlatos;
+    private String numeroMesa;
     private LocalDate fecha;
     private LocalTime hora;
     private String descrip;
