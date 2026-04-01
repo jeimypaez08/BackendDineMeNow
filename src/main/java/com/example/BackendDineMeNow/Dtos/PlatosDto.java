@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class PlatosDto {
 
     private String id;
-    private String nombre;
+    private String nombrePlatos;
     private String descripcion;
     private double precio;
     private List<Categorias> categoria;

@@ -17,7 +17,7 @@ public class MesaMapperImpl implements MesaMapper{
         }
         return Mesa.builder()
                 .id(mesaDto.getId())
-                .num_mesa(mesaDto.getNumero_Mesa())
+                .num_mesa(mesaDto.getNumeroMesa())
                 .capacidad(mesaDto.getCapacidad())
                 .estado(Boolean.parseBoolean(mesaDto.getEstado()))
                 .build();
@@ -30,7 +30,7 @@ public class MesaMapperImpl implements MesaMapper{
         }
         return MesaDto.builder()
                 .id(mesa.getId())
-                .numero_Mesa(mesa.getNum_mesa())
+                .numeroMesa(mesa.getNum_mesa())
                 .capacidad(mesa.getCapacidad())
                 .estado(String.valueOf(mesa.isEstado()))
                 .build();
@@ -60,7 +60,7 @@ public class MesaMapperImpl implements MesaMapper{
         }
 
         // Actualizar solo los campos que no son nulos en el DTO   
-        mesa.setNum_mesa(mesaDto.getNumero_Mesa());
+        mesa.setNum_mesa(mesaDto.getNumeroMesa());
         mesa.setCapacidad(mesaDto.getCapacidad());
         mesa.setEstado(Boolean.parseBoolean(mesaDto.getEstado()));
     }   

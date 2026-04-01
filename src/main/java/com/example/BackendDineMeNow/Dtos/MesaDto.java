@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class MesaDto {
     //FrontEnd
     private String id;
-    private String numero_Mesa;
+    private String numeroMesa;
     private int capacidad;
     private String estado;
 
