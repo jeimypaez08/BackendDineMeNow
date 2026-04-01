@@ -10,6 +10,7 @@ import com.example.BackendDineMeNow.models.Restaurante;
 
 @Component
 public class RestauranteMapperImpl implements RestauranteMapper{
+
   @Override
   public Restaurante toRestaurante (RestauranteDto restauranteDto){
     if (restauranteDto == null) {
@@ -17,12 +18,21 @@ public class RestauranteMapperImpl implements RestauranteMapper{
     }
     return Restaurante.builder()
       .id(restauranteDto.getId())
-      .NIT(restauranteDto.getNIT())
-      .razon_social(restauranteDto.getRazon_social())
+      .propietario(restauranteDto.getPropietario())
+      .nit(restauranteDto.getNit())
+      .razonSocial(restauranteDto.getRazonSocial())
+      .nombre(restauranteDto.getNombre())
+      .descripcion(restauranteDto.getDescripcion())
+      .categoria(restauranteDto.getCategoria())
       .telefono(restauranteDto.getTelefono())
       .correo(restauranteDto.getCorreo())
       .direccion(restauranteDto.getDireccion())
+      .horarioApertura(restauranteDto.getHorarioApertura())
+      .horarioCierre(restauranteDto.getHorarioCierre())
+      .diasAbierto(restauranteDto.getDiasAbierto())
       .foto(restauranteDto.getFoto())
+      .estado(restauranteDto.getEstado())
+      .mustChangePassword(restauranteDto.getMustChangePassword() != null && restauranteDto.getMustChangePassword())// Agregar el campo mustChangePassword al construir el objeto Restaurante
       .build();
   }
   @Override
@@ -32,12 +42,21 @@ public RestauranteDto toRestauranteDto (Restaurante restaurante){
   }
   return RestauranteDto.builder()
     .id(restaurante.getId())
-    .NIT(restaurante.getNIT())
-    .razon_social(restaurante.getRazon_social())
+    .propietario(restaurante.getPropietario())
+    .nit(restaurante.getNit())
+    .razonSocial(restaurante.getRazonSocial())
+    .nombre(restaurante.getNombre())
+    .descripcion(restaurante.getDescripcion())
+    .categoria(restaurante.getCategoria())
     .telefono(restaurante.getTelefono())
     .correo(restaurante.getCorreo())
     .direccion(restaurante.getDireccion())
+    .horarioApertura(restaurante.getHorarioApertura())
+    .horarioCierre(restaurante.getHorarioCierre())
+    .diasAbierto(restaurante.getDiasAbierto())
     .foto(restaurante.getFoto())
+    .estado(restaurante.getEstado())
+    .mustChangePassword(restaurante.getMustChangePassword())// Agregar el campo mustChangePassword al construir el objeto RestauranteDto
     .build();
 }
   @Override
@@ -57,11 +76,22 @@ public RestauranteDto toRestauranteDto (Restaurante restaurante){
     if (restauranteDto == null) {
       throw new IllegalArgumentException("El dto del Restaurante esta vacio");
     }
-    restaurante.setNIT(restauranteDto.getNIT());
-    restaurante.setRazon_social(restauranteDto.getRazon_social());
-    restaurante.setTelefono(restauranteDto.getTelefono());
-    restaurante.setCorreo(restauranteDto.getCorreo());
-    restaurante.setDireccion(restauranteDto.getDireccion());
-    restaurante.setFoto(restauranteDto.getFoto());
+    if (restauranteDto.getPropietario() != null) restaurante.setPropietario(restauranteDto.getPropietario());
+    if (restauranteDto.getNit() != null) restaurante.setNit(restauranteDto.getNit());
+    if (restauranteDto.getRazonSocial() != null) restaurante.setRazonSocial(restauranteDto.getRazonSocial());
+    if (restauranteDto.getNombre() != null) restaurante.setNombre(restauranteDto.getNombre());
+    if (restauranteDto.getDescripcion() != null) restaurante.setDescripcion(restauranteDto.getDescripcion());
+    if (restauranteDto.getCategoria() != null) restaurante.setCategoria(restauranteDto.getCategoria());
+    if (restauranteDto.getTelefono() != null) restaurante.setTelefono(restauranteDto.getTelefono());
+    if (restauranteDto.getCorreo() != null) restaurante.setCorreo(restauranteDto.getCorreo());
+    if (restauranteDto.getDireccion() != null) restaurante.setDireccion(restauranteDto.getDireccion());
+    if (restauranteDto.getHorarioApertura() != null) restaurante.setHorarioApertura(restauranteDto.getHorarioApertura());
+    if (restauranteDto.getHorarioCierre() != null) restaurante.setHorarioCierre(restauranteDto.getHorarioCierre());
+    if (restauranteDto.getDiasAbierto() != null) restaurante.setDiasAbierto(restauranteDto.getDiasAbierto());
+    if (restauranteDto.getFoto() != null) restaurante.setFoto(restauranteDto.getFoto());
+    if (restauranteDto.getEstado() != null) restaurante.setEstado(restauranteDto.getEstado());
+    
+    
   }
+
 }

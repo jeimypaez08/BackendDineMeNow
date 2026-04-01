@@ -18,9 +18,9 @@ public class ReservaMapperImpl implements ReservaMapper{
         }
         return Reserva.builder()
                 .id(reservaDto.getId())
-                .id_Cliente(reservaDto.getId_Cliente())
-                .id_Platos(reservaDto.getId_Platos())
-                .id_Mesa(reservaDto.getId_Mesa())
+                .nombreCliente(reservaDto.getNombreCliente())
+                .nombrePlatos(reservaDto.getNombrePlatos())
+                .numeroMesa(reservaDto.getNumeroMesa())
                 .fecha(reservaDto.getFecha())
                 .hora(reservaDto.getHora())
                 .descrip(reservaDto.getDescripcion())
@@ -35,9 +35,9 @@ public class ReservaMapperImpl implements ReservaMapper{
         }
         return ReservaDto.builder()
                 .id(reserva.getId())
-                .id_Cliente(reserva.getId_Cliente())
-                .id_Platos(reserva.getId_Platos())
-                .id_Mesa(reserva.getId_Mesa())
+                .nombreCliente(reserva.getNombreCliente())
+                .nombrePlatos(reserva.getNombrePlatos())
+                .numeroMesa(reserva.getNumeroMesa())
                 .fecha(reserva.getFecha())
                 .hora(reserva.getHora())
                 .descripcion(reserva.getDescrip())
@@ -67,8 +67,8 @@ public class ReservaMapperImpl implements ReservaMapper{
         }
         
         //Actualizar la entidad
-        reserva.setId_Platos(reservaDto.getId_Platos());
-        reserva.setId_Mesa(reservaDto.getId_Mesa());
+        reserva.setNombrePlatos(reservaDto.getNombrePlatos());
+        reserva.setNumeroMesa(reservaDto.getNumeroMesa());
         reserva.setFecha(reservaDto.getFecha());
         reserva.setHora(reservaDto.getHora());
         reserva.setDescrip(reservaDto.getDescripcion());

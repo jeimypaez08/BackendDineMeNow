@@ -52,7 +52,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         //Guardar el perfil
         Cliente perfil = Cliente.builder()
-        .nombre(dto.getNombre())
+        .nombreCliente(dto.getNombre())
         .apellido(dto.getApellido())
         .documento(dto.getDocumento())
         .direccion(dto.getDireccion())
@@ -68,7 +68,7 @@ public class ClienteServiceImpl implements ClienteService {
         auth.setId(perfilGuardado.getId());
         auth.setUser(dto.getUser());
         auth.setPass(passwordEncoder.encode(dto.getPassword()));//Encriptar
-        auth.setRoles(List.of(Rol.Rol_CLIENTE)); //Rol fijo
+        auth.setRoles(List.of(Rol.ROL_CLIENTE)); //Rol fijo
 
         authRepo.save(auth);
 

@@ -17,7 +17,7 @@ public class Cliente {
     //BackEnd
     @Id
     private String id;
-    private String nombre;
+    private String nombreCliente;
     private String apellido;
     private Documento documento;
     private Direccion direccion;

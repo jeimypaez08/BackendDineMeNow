@@ -17,7 +17,7 @@ public class ClienteMapperImpl implements ClienteMapper{
         }
         return Cliente.builder()
             .id(clienteDto.getId())
-            .nombre(clienteDto.getNombre())
+            .nombreCliente(clienteDto.getNombreCliente())
             .apellido(clienteDto.getApellido())
             .documento(clienteDto.getDocumento())
             .direccion(clienteDto.getDireccion())
@@ -34,7 +34,7 @@ public class ClienteMapperImpl implements ClienteMapper{
         }
         return ClienteDto.builder()
             .id(cliente.getId())
-            .nombre(cliente.getNombre())
+            .nombreCliente(cliente.getNombreCliente())
             .apellido(cliente.getApellido())
             .documento(cliente.getDocumento())
             .direccion(cliente.getDireccion())
@@ -69,7 +69,7 @@ public class ClienteMapperImpl implements ClienteMapper{
         }
 
         //Actualizar solo los campos que vienen con valor
-        if (clienteDto.getNombre() != null) cliente.setNombre(clienteDto.getNombre());
+        if (clienteDto.getNombreCliente() != null) cliente.setNombreCliente(clienteDto.getNombreCliente());
         if (clienteDto.getApellido() != null) cliente.setApellido(clienteDto.getApellido());
         if (clienteDto.getDocumento() != null) cliente.setDocumento(clienteDto.getDocumento());
         if (clienteDto.getDireccion() != null) cliente.setDireccion(clienteDto.getDireccion());
