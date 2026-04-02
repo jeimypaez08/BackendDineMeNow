@@ -18,7 +18,7 @@ import com.example.BackendDineMeNow.Services.MesaService;
 
 
 @RestController
-@RequestMapping("/MesasController")
+@RequestMapping("/api/mesas")
 public class MesaController {
     private final MesaService mesaService;
     
@@ -36,9 +36,16 @@ public class MesaController {
     
     // Listar mesas
 
-    @GetMapping("/listarMesas")
+    @GetMapping
     public ResponseEntity<List<MesaDto>> obtenerMesa() {
         return ResponseEntity.ok(mesaService.ListaMesas());
+    }
+
+    // Listar mesas por restaurante
+    @GetMapping("/restaurante/{nitRestaurante}")
+    public ResponseEntity<List<MesaDto>> obtenerMesaPorRestau(@PathVariable String nitRestaurante) {
+        List<MesaDto> mesas = mesaService.listarPorRestaurante(nitRestaurante);
+        return ResponseEntity.ok(mesas);
     }
 
     // Actualizar mesa
@@ -54,4 +61,11 @@ public class MesaController {
         return ResponseEntity.noContent().build();
     }
 
-}
+    //borrar mesa por nit restaurante y numero de mesa
+    @DeleteMapping ("/borrarMesa/{nitRestaurante}/{numMesa}")
+        public ResponseEntity<Void> eliminarPorNitYNum(@PathVariable String nitRestaurante, @PathVariable String numMesa){
+            mesaService.borrarMesaPorNitRestauranteAndNum(nitRestaurante, numMesa);
+            return ResponseEntity.noContent().build();
+        }
+    }
+    
