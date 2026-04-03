@@ -1,7 +1,9 @@
 package com.example.BackendDineMeNow.models;
 
+
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "Platos")
+@Document(collection = "platos")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +19,10 @@ import lombok.NoArgsConstructor;
 public class Platos {
 //Modelo es para el sistema
 //BackEnd
+@Id
     private String idplatos;
-    private String nomPlatos;
+    private String nitRestaurante;
+    private String nomPlato;
     private String desc;
     private double precio;
     private List<Categorias> categ; //Lista de categorias
