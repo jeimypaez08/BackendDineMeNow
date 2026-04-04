@@ -13,7 +13,7 @@ public class MesaDto {
     //FrontEnd
     private String id;
     private String nitRestaurante; //nit del restaurante al que pertenece la mesa
-    private String numeroMesa;
+    private String numMesa;
     private int capacidad;
     private String estado;
 
