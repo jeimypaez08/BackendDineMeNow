@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.example.BackendDineMeNow.Dtos.ReservaDto;
+import com.example.BackendDineMeNow.models.EstadoReserva;
 import com.example.BackendDineMeNow.models.Reserva;
 
 @Component
@@ -18,13 +19,16 @@ public class ReservaMapperImpl implements ReservaMapper{
         }
         return Reserva.builder()
                 .id(reservaDto.getId())
-                .nombCliente(reservaDto.getNombreCliente())
+                .nitRestaurante(reservaDto.getNitRestaurante())
+                .nombreCliente(reservaDto.getNombreCliente())
                 .nomPlato(reservaDto.getNombrePlatos())
                 .numMesa(reservaDto.getNumeroMesa())
                 .fecha(reservaDto.getFecha())
                 .hora(reservaDto.getHora())
                 .descrip(reservaDto.getDescripcion())
-                .estado(Boolean.parseBoolean(reservaDto.getEstado()))
+                .estado(reservaDto.getEstado() !=null ?// Verificar si el estado no es nulo antes de intentar convertirlo a un valor de la enumeración EstadoReserva
+                        EstadoReserva.valueOf(reservaDto.getEstado().toUpperCase()):// Si el estado no es nulo, se convierte a un valor de la enumeración EstadoReserva, de lo contrario se asigna un valor por defecto
+                        EstadoReserva.PENDIENTE)// Si el estado es nulo, se asigna un valor por defecto (PENDIENTE) para evitar errores de NullPointerException
                 .build();
     }
 
@@ -35,26 +39,23 @@ public class ReservaMapperImpl implements ReservaMapper{
         }
         return ReservaDto.builder()
                 .id(reserva.getId())
-                .nombreCliente(reserva.getNombCliente())
+                .nitRestaurante(reserva.getNitRestaurante())
+                .nombreCliente(reserva.getNombreCliente())
                 .nombrePlatos(reserva.getNomPlato())
                 .numeroMesa(reserva.getNumMesa())
                 .fecha(reserva.getFecha())
                 .hora(reserva.getHora())
                 .descripcion(reserva.getDescrip())
-                .estado(String.valueOf(reserva.isEstado()))
+                .estado(reserva.getEstado() != null ? reserva.getEstado().name() : null)// Verificar si el estado no es nulo antes de intentar convertirlo a una cadena, de lo contrario se asigna null
                 .build();
     }
 
     //Lista de reservas
     @Override
     public List<ReservaDto> toReservaDtoList(List<Reserva> reservas){
-        if (reservas == null) {
-            return null;
-        }
+        if (reservas == null) return null;// Verificar si la lista de reservas es nula antes de intentar convertirla, de lo contrario se asigna null para evitar errores de NullPointerException
+            return reservas.stream().map(this::toReservaDto).toList();// Convertir cada reserva de la lista a un DTO utilizando el método toReservaDto y recopilar los resultados en una nueva lista de DTOs
 
-        return reservas.stream()
-                .map(this::toReservaDto)
-                .toList();
     }
 
     @Override
@@ -67,11 +68,14 @@ public class ReservaMapperImpl implements ReservaMapper{
         }
         
         //Actualizar la entidad
+        reserva.setNombreCliente(reservaDto.getNombreCliente());
         reserva.setNomPlato(reservaDto.getNombrePlatos());
         reserva.setNumMesa(reservaDto.getNumeroMesa());
         reserva.setFecha(reservaDto.getFecha());
         reserva.setHora(reservaDto.getHora());
         reserva.setDescrip(reservaDto.getDescripcion());
-        reserva.setEstado(Boolean.parseBoolean(reservaDto.getEstado()));
+        if(reservaDto.getEstado() != null){// Verificar si el estado no es nulo antes de intentar convertirlo a un valor de la enumeración EstadoReserva
+        reserva.setEstado(EstadoReserva.valueOf(reservaDto.getEstado().toUpperCase()));// Si el estado no es nulo, se convierte a un valor de la enumeración EstadoReserva y se asigna a la reserva, de lo contrario no se actualiza el estado para evitar errores de NullPointerException
+        }
     }
 }
