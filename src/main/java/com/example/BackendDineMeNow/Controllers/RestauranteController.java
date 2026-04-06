@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController// Anotación para indicar que esta clase es un controlador REST en Spring Boot, lo que permite manejar solicitudes HTTP y devolver respuestas en formato JSON
 @RequestMapping ("/api/restaurantes")// Anotación para mapear las solicitudes HTTP a la ruta "/api/restaurantes", lo que significa que todas las solicitudes a esta ruta serán manejadas por los métodos de esta clase
 public class RestauranteController {
@@ -35,9 +37,14 @@ public class RestauranteController {
 
   //POST /api/restaurantes
   @PostMapping("/registro")// Método para manejar solicitudes POST a la ruta "/api/restaurantes", lo que significa que se utilizará para crear un nuevo restaurante
-  public ResponseEntity<RestauranteDto> crearRestaurante(@RequestBody RestauranteDto restauranteDto){// Recibir un objeto RestauranteDto en el cuerpo de la solicitud, crear un nuevo restaurante utilizando el servicio y devolver una respuesta con el restaurante creado y un estado HTTP 201 (CREATED)
-    return ResponseEntity.status(HttpStatus.CREATED)
-    .body(restauranteService.crearRestaurante(restauranteDto));
+  public ResponseEntity<?> crearRestaurante(@RequestBody RestauranteDto restauranteDto){// Recibir un objeto RestauranteDto en el cuerpo de la solicitud, crear un nuevo restaurante utilizando el servicio y devolver una respuesta con el restaurante creado y un estado HTTP 201 (CREATED)
+    try{
+      RestauranteDto nuevo = restauranteService.crearRestaurante(restauranteDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
+    } catch(RuntimeException e){
+      // Esto le enviará al frontend el mensaje "El NIT ya existe" o similar
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
   }
 
   //POST /api/restaurantes/login
