@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/reservas")
+@RequestMapping("/api/reservas")
 public class ReservaController {
     private final ReservaService reservaService;
 
@@ -34,13 +34,19 @@ public class ReservaController {
     }
 
     // Listar reservas
-    @GetMapping("/ListReservas")
+    @GetMapping
     public ResponseEntity<List<ReservaDto>> obtenerReserva() {
-        return ResponseEntity.ok(reservaService.ListaReservas());
+        return ResponseEntity.ok(reservaService.listaReservas());
+    }
+
+    // Listar reservas por nit del restaurante
+    @GetMapping("/restaurante/{nitRestaurante}")
+    public ResponseEntity<List<ReservaDto>> obtenerReservaPorNit(@PathVariable String nitRestaurante) {
+        return ResponseEntity.ok(reservaService.listarPorNit(nitRestaurante));
     }
 
     // Actualizar reserva
-    @PutMapping("/UpdateReserva/{id}")
+    @PutMapping("/actuReserva/{id}")
     public ResponseEntity<ReservaDto> actualizarReserva(@PathVariable String id, @RequestBody ReservaDto reservaDto) {
         return ResponseEntity.ok(reservaService.actReserva(id, reservaDto));
     }

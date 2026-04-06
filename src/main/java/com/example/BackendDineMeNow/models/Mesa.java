@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 public class Mesa {
     @Id
     private String id;
-    private String num_mesa;
+    private String nitRestaurante; //nit del restaurante al que pertenece la mesa
+    private String numMesa;//numero de la mesa dentro del restaurante
     private int capacidad; // numero de personas que pueden sentarse en la mesa
     private boolean estado; //mesa está disponible para reservar o no
 

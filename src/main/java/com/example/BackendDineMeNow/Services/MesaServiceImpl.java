@@ -33,6 +33,13 @@ public class MesaServiceImpl implements MesaService{
         return mesaMapper.toMesaDtoList(mesaRepository.findAll());
     }
 
+    // Listar mesas por restaurante
+    @Override
+    public List<MesaDto> listarPorRestaurante(String nitRestaurante){
+        List<Mesa> mesas = mesaRepository.findByNitRestaurante(nitRestaurante);
+        return mesaMapper.toMesaDtoList(mesas);
+    }
+
     // Actualizar mesa
     @Override
     public MesaDto actMesa(String id, MesaDto mesaDto) {
@@ -51,5 +58,14 @@ public class MesaServiceImpl implements MesaService{
         mesaRepository.deleteById(id);
     }
 
+    // Eliminar mesa por nit restaurante y numero de mesa
+    @Override
+    public void borrarMesaPorNitRestauranteAndNum(String nitRestaurante, String numMesa){
+        mesaRepository.deleteByNitRestauranteAndNumMesa(nitRestaurante, numMesa);
+    
+    // Agregar un mensaje de log para verificar que se está llamando al método
+    System.out.println("Intento de borrado de mesa " + numMesa + " del NIT: " + nitRestaurante);
+    }
 
-}
+    }
+
