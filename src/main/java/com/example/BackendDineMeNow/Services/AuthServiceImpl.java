@@ -1,5 +1,6 @@
 package com.example.BackendDineMeNow.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,8 @@ import com.example.BackendDineMeNow.models.Cliente;
 import com.example.BackendDineMeNow.models.ClienteAuth;
 import com.example.BackendDineMeNow.repositories.ClienteAuthRepository;
 import com.example.BackendDineMeNow.repositories.ClienteRepository;
+import com.example.BackendDineMeNow.repositories.RestauranteRepository;
+import com.example.BackendDineMeNow.models.Rol;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -22,9 +25,11 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthServiceImpl(ClienteAuthRepository authRepo, 
                            ClienteRepository clienteRepo, 
+                           RestauranteRepository restaurateRepo,
                            PasswordEncoder passwordEncoder) {
         this.authRepo = authRepo;
         this.clienteRepo = clienteRepo;
+        this.restauranteRepo = restaurateRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -32,8 +37,9 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDto login(LoginRequestDto dto) {
 
         String identificador = dto.getIdentificador();
-        ClienteAuth auth;
 
+        try{
+        ClienteAuth auth;
 
         //1. Buscar el cliente por usuario
         Optional<ClienteAuth> porUser = authRepo.findByUser(identificador);
@@ -71,6 +77,31 @@ public class AuthServiceImpl implements AuthService {
             .roles(auth.getRoles())
             .build();
 
+    } catch(RuntimeException e){
 
-}
-}
+        //intentar como restaurante
+
+        return restauranteRepo.findByCorreo(identificador)
+            .or(()-> restauranteRepo.findByNit(identificador))
+            .map(restaurante->{
+                //verificar contraseña del restaurante
+                if (!passwordEncoder.matches(dto.getPassword(), restaurante.getPassword())) {
+                    throw new RuntimeException("Contraseña incorrecta");
+                }
+                //verificar que este activo
+                if(restaurante.getEstado() != com.example.BackendDineMeNow.models.EstadoRestaurante.ACTIVO){
+                    throw new RuntimeException("Restaurante pendiente por aprobacion");
+                }
+                //respuesta para el restaurante
+                return LoginResponseDto.builder()
+                .mensaje("Inicio de Sesion exitoso (Restaurante)")
+                .id(restaurante.getId())
+                .nombre(restaurante.getNombre())
+                .correo(restaurante.getCorreo())
+                .roles(List.of(Rol.ROL_RESTAURANTE))
+                .build();
+            })
+            .orElseThrow(() -> new RuntimeException("Usuario o Restaurante no encontrado"));
+    }
+}}
+
