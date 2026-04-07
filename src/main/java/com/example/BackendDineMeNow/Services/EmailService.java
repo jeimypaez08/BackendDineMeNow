@@ -8,4 +8,6 @@ public interface EmailService {
 
     void enviarConfirmacionRecibido(String correoDestino, String nombreRestaurante); // Método para enviar confirmación de recibido de solicitud o mensaje al restaurante
 
+    void enviarCodigoVerificacion(String correoDestino, String nombre, String codigo); // Método para enviar el código de verificación al cliente
+
 }

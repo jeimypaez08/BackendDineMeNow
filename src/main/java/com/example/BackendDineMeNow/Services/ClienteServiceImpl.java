@@ -1,7 +1,8 @@
 package com.example.BackendDineMeNow.Services;
 
+import java.util.Date;
 import java.util.List;
-
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,11 @@ import com.example.BackendDineMeNow.Mapper.ClienteMapper;
 import com.example.BackendDineMeNow.models.Cliente;
 import com.example.BackendDineMeNow.models.ClienteAuth;
 import com.example.BackendDineMeNow.models.Rol;
+import com.example.BackendDineMeNow.models.VerificacionRegistro;
 import com.example.BackendDineMeNow.repositories.ClienteAuthRepository;
 import com.example.BackendDineMeNow.repositories.ClienteRepository;
+import com.example.BackendDineMeNow.repositories.VerificacionRepository;
+import com.example.BackendDineMeNow.Services.EmailService;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -24,6 +28,10 @@ public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteAuthRepository authRepo;
 
+    private final VerificacionRepository verificacionRepo;
+
+    private final EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
 
 
@@ -31,10 +39,14 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteServiceImpl(ClienteRepository clienteRepo, 
                               ClienteAuthRepository authRepo, 
                               ClienteMapper clienteMapper, 
+                              VerificacionRepository verificacionRepo,
+                              EmailService emailService,
                               PasswordEncoder passwordEncoder) {
         this.clienteRepo = clienteRepo;
         this.authRepo = authRepo;
         this.clienteMapper = clienteMapper;
+        this.verificacionRepo = verificacionRepo;
+        this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         
     }
@@ -72,7 +84,24 @@ public class ClienteServiceImpl implements ClienteService {
 
         authRepo.save(auth);
 
+        String codigo = generarCodigoVerificacion(6);
+        verificacionRepo.deleteByCorreo(dto.getCorreo());
+        VerificacionRegistro verificacion = VerificacionRegistro.builder()
+                .correo(dto.getCorreo())
+                .codigo(codigo)
+                .fechaCreacion(new Date())
+                .build();
+        verificacionRepo.save(verificacion);
+
+        emailService.enviarCodigoVerificacion(dto.getCorreo(), dto.getNombre(), codigo);
+
         return dto;
+    }
+
+    private String generarCodigoVerificacion(int length) {
+        int minimo = (int) Math.pow(10, length - 1);
+        int maximo = (int) Math.pow(10, length) - 1;
+        return String.valueOf(ThreadLocalRandom.current().nextInt(minimo, maximo + 1));
     }
 
 

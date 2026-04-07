@@ -16,4 +16,5 @@ public interface ClienteRepository extends MongoRepository<Cliente, String> {
     boolean existsByDocumentoNumero(String numero);
     Optional<Cliente> findByDocumentoNumero(String numero); // Buscar cliente por número de documento
 
+    
 }

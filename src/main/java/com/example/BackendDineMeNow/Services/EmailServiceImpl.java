@@ -45,6 +45,14 @@ public class EmailServiceImpl implements EmailService {
         enviarCorreoHtml(correoDestino, asunto, cuerpo);
     }
 
+    //enviar código de verificación al cliente
+    @Override
+    public void enviarCodigoVerificacion(String correoDestino, String nombre, String codigo){
+        String asunto = "DineMeNow - Código de verificación";
+        String cuerpo = construirCorreoCodigoVerificacion(nombre, codigo);
+        enviarCorreoHtml(correoDestino, asunto, cuerpo);
+    }
+
     // envio de correo genérico
     private void enviarCorreoHtml(String correoDestino, String asunto, String cuerpoHtml){
         // Implementación para enviar un correo electrónico utilizando JavaMailSender
@@ -85,6 +93,23 @@ public class EmailServiceImpl implements EmailService {
           <p style="font-size: 12px; color: #9e9e9e;">DineMeNow — Reservas de restaurantes en Bogotá</p>
         </div>
         """.formatted(nombreRestaurante, correoDestino, passwordTemporal);
+    }
+
+    private String construirCorreoCodigoVerificacion(String nombre, String codigo){
+        return """
+        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 32px; border: 1px solid #e0e0e0; border-radius: 8px;\">
+          <h2 style=\"color: #D84315;\">¡Hola, %s!</h2>
+          <p>Gracias por registrarte en <strong>DineMeNow</strong>.</p>
+          <p>Tu código de verificación es:</p>
+          <div style=\"background: #f5f5f5; padding: 16px; border-radius: 6px; margin: 24px 0; text-align: center; font-size: 24px; letter-spacing: 4px;\">
+            <strong>%s</strong>
+          </div>
+          <p>Ingresa este código en la aplicación para validar tu correo electrónico.</p>
+          <p>Si no solicitaste este código, ignora este correo.</p>
+          <hr style=\"margin: 32px 0; border: none; border-top: 1px solid #e0e0e0;\">
+          <p style=\"font-size: 12px; color: #9e9e9e;\">DineMeNow — Reservas de restaurantes en Bogotá</p>
+        </div>
+        """.formatted(nombre, codigo);
     }
 
     private String construirCorreoEstado(String nombreRestaurante, String nuevoEstado){

@@ -24,6 +24,7 @@ public class Cliente {
     private String correo;
     private String telefono;
     private String foto;
-
+    @Builder.Default
+    private boolean verificado = false;
 
 }
