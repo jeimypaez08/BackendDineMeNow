@@ -16,6 +16,8 @@ public interface RestauranteRepository extends MongoRepository<Restaurante, Stri
     Optional<Restaurante> findByNit(String nit);// Buscar un restaurante por su nit
     Optional<Restaurante> findByCorreo(String correo);// Buscar un restaurante por su correo
 
+    long countByEstado(EstadoRestaurante estado);
+
 
     List<Restaurante> findByEstado(EstadoRestaurante estado);// Buscar restaurantes por su estado (activo, inactivo, pendiente etc.)
     List<Restaurante> findByCategoria(String categoria);// Buscar restaurantes por su categoría (italiano, chino, mexicano etc.)

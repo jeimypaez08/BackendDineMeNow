@@ -134,6 +134,12 @@ public List<RestauranteDto> listarPorCategoria(String categoria){
   return restauranteMapper.toRestauranteDtoList(restauranteRepo.findByCategoria(categoria));
 }
 
+//hacer conteo de restaurantes pendientes
+@Override
+public Long contarPorEstado(EstadoRestaurante estado) {
+    return restauranteRepo.countByEstado(estado);
+}
+
 //obtener por id
 @Override
 public RestauranteDto obtenerPorId(String id){// Buscar el restaurante por su ID, si no se encuentra, lanzar una excepción

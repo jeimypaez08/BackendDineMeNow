@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 
+
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController// Anotación para indicar que esta clase es un controlador REST en Spring Boot, lo que permite manejar solicitudes HTTP y devolver respuestas en formato JSON
 @RequestMapping ("/api/restaurantes")// Anotación para mapear las solicitudes HTTP a la ruta "/api/restaurantes", lo que significa que todas las solicitudes a esta ruta serán manejadas por los métodos de esta clase
@@ -91,6 +93,13 @@ public class RestauranteController {
   public ResponseEntity<RestauranteDto> obtenerPorNit(@PathVariable String nit) {// Buscar un restaurante por su NIT utilizando el servicio y devolver una respuesta con el restaurante encontrado y un estado HTTP 200 (OK)
       return ResponseEntity.ok(restauranteService.obtenerPorNit(nit));
   }
+
+  //GET /api/resturante/count/estado/{estado}
+  @GetMapping("/count/estado/{estado}")
+  public ResponseEntity<Long> contarPorEstado(@PathVariable EstadoRestaurante estado ){
+    return ResponseEntity.ok(restauranteService.contarPorEstado(estado));
+  }
+  
 
 
   
