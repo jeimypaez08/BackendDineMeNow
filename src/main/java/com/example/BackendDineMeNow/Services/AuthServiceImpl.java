@@ -17,6 +17,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final ClienteAuthRepository authRepo;
     private final ClienteRepository clienteRepo;
+    private final RestauranteRepository restauranteRepo;
     private final PasswordEncoder passwordEncoder;
 
     public AuthServiceImpl(ClienteAuthRepository authRepo, 

@@ -13,6 +13,8 @@ public interface ReservaService {
     List<ReservaDto> listarPorNit(String nitRestaurante);
     List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha);
 
+    
+
     ReservaDto actReserva(String id, ReservaDto reservaDto);
 
     void borrarReserva(String id);

@@ -15,6 +15,8 @@ public interface RestauranteService {
   List<RestauranteDto> listarRestaurante();
   List<RestauranteDto> listarPorEstado(EstadoRestaurante estado);
   List<RestauranteDto> listarPorCategoria(String categoria);
+  Long contarPorEstado(EstadoRestaurante estado);
+
 
   RestauranteDto obtenerPorId(String id);
   RestauranteDto obtenerPorNit(String nit);
