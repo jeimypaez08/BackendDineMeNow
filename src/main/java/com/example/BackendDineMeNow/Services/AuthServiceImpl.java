@@ -73,6 +73,7 @@ public class AuthServiceImpl implements AuthService {
             .mensaje("Login exitoso")
             .id(cliente.getId())
             .nombre(cliente.getNombreCliente())
+            .apellido(cliente.getApellido())
             .correo(cliente.getCorreo())
             .roles(auth.getRoles())
             .build();
