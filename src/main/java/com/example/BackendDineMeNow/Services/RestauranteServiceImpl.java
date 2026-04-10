@@ -49,10 +49,16 @@ public RestauranteDto crearRestaurante (RestauranteDto restauranteDto){
   restaurante.setEstado(EstadoRestaurante.PENDIENTE);// Establecer el estado inicial del restaurante como "PENDIENTE"
   restaurante.setMustChangePassword(false);//no se le envian credenciales al restaurante en este punto, el administrador debe aprobarlo primero para que se le envien las credenciales temporales
 
+  //guardar en la bd primero
   Restaurante guardado = restauranteRepo.save(restaurante);
 
   //notificar al restaurante que su solicitud de registro ha sido recibida
+  try{
   emailService.enviarConfirmacionRecibido(guardado.getCorreo(), guardado.getNombre());
+  }catch (Exception e){
+    //mostrar error en la consola del servidor
+    System.err.println("SMTP:   no se pudo enviar correo de confirmacion: "+ e.getMessage());
+  }
 
   return restauranteMapper.toRestauranteDto(guardado);
 }
@@ -73,8 +79,13 @@ public RestauranteDto aprobarRestaurante(String nit){
   //guardar el restaurante en la base de datos
   Restaurante guardado = restauranteRepo.save(restaurante);
 
+  try{
   // Enviar un correo electrónico al restaurante con la contraseña temporal
   emailService.enviarCredenciales(guardado.getCorreo(), guardado.getNombre(), passwordTemporal);
+  }catch (Exception e){
+    System.err.println("SMTP: error al enviar las credenciales "+ e.getMessage());
+
+  }
 
   return restauranteMapper.toRestauranteDto(guardado);// Guardar el restaurante en la base de datos y convertirlo de nuevo a DTO para devolverlo
 }
@@ -110,8 +121,11 @@ public RestauranteDto rechazarRestaurante(String nit){
       restaurante.setEstado(EstadoRestaurante.RECHAZADO);
       Restaurante guardado = restauranteRepo.save(restaurante);
 
+      try{
       emailService.enviarNotificacionEstado(guardado.getCorreo(), guardado.getNombre(), "RECHAZADO");
-
+      }catch (Exception e){
+        System.err.println("SMTP: error al notificar el rechazo:" + e.getMessage());
+      }
       return restauranteMapper.toRestauranteDto(guardado);
 }
 
