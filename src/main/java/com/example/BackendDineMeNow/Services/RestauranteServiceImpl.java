@@ -251,6 +251,7 @@ private String generarPasswordTemporal() {
   // Aquí implementar la lógica para generar una contraseña temporal segura
   // Por ejemplo, usar una combinación de letras, números y caracteres especiales
   // establecer una longitud mínima para la contraseña temporal
-  return "Temp1234!" + UUID.randomUUID().toString().substring(0, 6).toUpperCase(); // Ejemplo de contraseña temporal generada
+  String randomPart = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase(); // Ejemplo de contraseña temporal generada
+  return "Dine" + randomPart + "!";
 }
 }

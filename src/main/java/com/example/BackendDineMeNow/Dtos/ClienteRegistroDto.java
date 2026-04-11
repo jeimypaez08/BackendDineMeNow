@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ClienteRegistroDto {
+    
     private String nombre;
     private String apellido;
     private Documento documento;

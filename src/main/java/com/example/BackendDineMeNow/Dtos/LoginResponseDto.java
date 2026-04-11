@@ -15,11 +15,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponseDto {
     private String mensaje;
+    private String token;
     private String id;
     private String nombre;
     private String apellido;
     private String correo;
     private List<Rol> roles;
+    private boolean mustChangePassword;
 
 
 

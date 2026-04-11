@@ -46,10 +46,25 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.listarClientes());
     }
 
+    @GetMapping("/perfil")
+public ResponseEntity<?> obtenerPerfil() {
+    // 1. Extraemos la autenticación actual del "baúl" de Spring
+    var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+    
+    // 2. Obtenemos el nombre (username o correo) que guardamos en el filtro
+    String nombreUsuario = auth.getName();
+    
+    System.out.println(">>> Acceso privado detectado para: " + nombreUsuario);
+
+    // 3. Devolvemos una respuesta personalizada
+    return ResponseEntity.ok("Bienvenido al panel, " + nombreUsuario + ". Tu token es 100% válido.");
+}
+
 
     // GET api/clientes/{id}
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDto> obtenerPorId(@PathVariable String id) {
+        
         return ResponseEntity.ok(clienteService.obtenerClientePorId(id));
     }
 
