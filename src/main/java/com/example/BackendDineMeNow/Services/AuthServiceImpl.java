@@ -13,6 +13,7 @@ import com.example.BackendDineMeNow.models.ClienteAuth;
 import com.example.BackendDineMeNow.repositories.ClienteAuthRepository;
 import com.example.BackendDineMeNow.repositories.ClienteRepository;
 import com.example.BackendDineMeNow.repositories.RestauranteRepository;
+import com.example.BackendDineMeNow.security.JwtService;
 import com.example.BackendDineMeNow.models.Rol;
 
 @Service
@@ -22,15 +23,18 @@ public class AuthServiceImpl implements AuthService {
     private final ClienteRepository clienteRepo;
     private final RestauranteRepository restauranteRepo;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService; //
 
     public AuthServiceImpl(ClienteAuthRepository authRepo, 
                            ClienteRepository clienteRepo, 
                            RestauranteRepository restaurateRepo,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           JwtService jwtService) {
         this.authRepo = authRepo;
         this.clienteRepo = clienteRepo;
         this.restauranteRepo = restaurateRepo;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -69,10 +73,13 @@ public class AuthServiceImpl implements AuthService {
             .orElseThrow(()-> new RuntimeException("Perfil de cliente no encontrado"));
 
         //5. Construir respuesta
+        String token = jwtService.generarToken(cliente.getCorreo());
         return LoginResponseDto.builder()
             .mensaje("Login exitoso")
+            .token(token)
             .id(cliente.getId())
             .nombre(cliente.getNombreCliente())
+            .apellido(cliente.getApellido())
             .correo(cliente.getCorreo())
             .roles(auth.getRoles())
             .build();
@@ -92,13 +99,17 @@ public class AuthServiceImpl implements AuthService {
                 if(restaurante.getEstado() != com.example.BackendDineMeNow.models.EstadoRestaurante.ACTIVO){
                     throw new RuntimeException("Restaurante pendiente por aprobacion");
                 }
+
+                String token = jwtService.generarToken(restaurante.getCorreo());
                 //respuesta para el restaurante
                 return LoginResponseDto.builder()
                 .mensaje("Inicio de Sesion exitoso (Restaurante)")
+                .token(token)
                 .id(restaurante.getId())
                 .nombre(restaurante.getNombre())
                 .correo(restaurante.getCorreo())
                 .roles(List.of(Rol.ROL_RESTAURANTE))
+                .mustChangePassword(restaurante.getMustChangePassword())
                 .build();
             })
             .orElseThrow(() -> new RuntimeException("Usuario o Restaurante no encontrado"));

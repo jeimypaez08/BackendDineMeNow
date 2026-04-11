@@ -17,7 +17,6 @@ import com.example.BackendDineMeNow.models.VerificacionRegistro;
 import com.example.BackendDineMeNow.repositories.ClienteAuthRepository;
 import com.example.BackendDineMeNow.repositories.ClienteRepository;
 import com.example.BackendDineMeNow.repositories.VerificacionRepository;
-import com.example.BackendDineMeNow.Services.EmailService;
 
 
 
@@ -95,7 +94,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .build();
         verificacionRepo.save(verificacion);
 
-        emailService.enviarCodigoVerificacion(dto.getCorreo(), dto.getNombre(), codigo);
+            emailService.enviarCodigoVerificacion(dto.getCorreo(), dto.getNombre(), codigo);
 
         return dto;
     }

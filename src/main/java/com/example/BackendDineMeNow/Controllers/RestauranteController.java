@@ -144,9 +144,13 @@ public class RestauranteController {
 
   //PUT /api/restaurantes/nit/{nit}/cambiar-password
   @PutMapping("/nit/{nit}/cambiar-password")
-  public ResponseEntity<Void> cambiarPassword(@PathVariable String nit, @RequestBody CambiarContraDto cambiarContraDto) {// Método para manejar solicitudes PUT a la ruta "/api/restaurantes/nit/{nit}/cambiar-password", lo que significa que se utilizará para cambiar la contraseña de un restaurante existente por su NIT
+  public ResponseEntity<?> cambiarPassword(@PathVariable String nit, @RequestBody CambiarContraDto cambiarContraDto) {// Método para manejar solicitudes PUT a la ruta "/api/restaurantes/nit/{nit}/cambiar-password", lo que significa que se utilizará para cambiar la contraseña de un restaurante existente por su NIT
+  try{
     restauranteService.cambiarPassword(nit, cambiarContraDto.getPasswordActual(), cambiarContraDto.getPasswordNueva());// Cambiar la contraseña del restaurante utilizando el servicio y devolver una respuesta con un estado HTTP 204 (NO CONTENT) si el cambio fue exitoso
-    return ResponseEntity.noContent().build();// Devolver una respuesta con un estado HTTP 204 (NO CONTENT) si el cambio fue exitoso
+    return ResponseEntity.ok("Contraseña actualizada con éxito");//devuelve un mensaje de exito para queb el front sepa que todo nice
+  }catch (RuntimeException e){
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());// Devolver una respuesta con un estado HTTP 204 (NO CONTENT) si la contra no coincide
+  }
   }
 
   
