@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/restaurantes/registro/**").permitAll()
                 .requestMatchers("/api/restaurantes/estado/ACTIVO").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/clientes").permitAll()
+                .requestMatchers("/api/restaurantes/**").permitAll()
                 
 
 

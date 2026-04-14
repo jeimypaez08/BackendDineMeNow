@@ -4,6 +4,7 @@ public enum Rol {
     ROL_CLIENTE,
     ROL_RESTAURANTE,
     ROL_CHEF,
-    ROL_MESERO
+    ROL_MESERO,
+    ROL_ADMIN
 
 }

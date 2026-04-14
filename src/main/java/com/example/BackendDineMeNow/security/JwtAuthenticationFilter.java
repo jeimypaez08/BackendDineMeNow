@@ -31,6 +31,8 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             path.startsWith("/api/verificacion") ||
             path.equals("/api/restaurantes/registro") ||
             path.equals("/api/auth/login") ||
+            path.equals("/api/clientes") ||
+            path.startsWith("/api/restaurantes") ||
             path.startsWith("/api/restaurantes/estado/ACTIVO")
         ){
                 filterChain.doFilter(request, response);
