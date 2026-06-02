@@ -27,6 +27,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                //rutas publicas
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/clientes/registro").permitAll()
                 .requestMatchers("/api/verificacion/**").permitAll()
@@ -41,8 +42,6 @@ public class SecurityConfig {
                 "/swagger-ui.html"
                 ).permitAll()
                 
-
-
                 .anyRequest().authenticated()
             )
             //registrar el filtro
