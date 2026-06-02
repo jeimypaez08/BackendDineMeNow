@@ -2,19 +2,50 @@ package com.example.BackendDineMeNow.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    private final  JwtAuthenticationFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter){
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //Desactivar seguridad para todas las rutas (nivel de acceso)
         http
             .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll());
+                //rutas publicas
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/clientes/registro").permitAll()
+                .requestMatchers("/api/verificacion/**").permitAll()
+                .requestMatchers("/api/restaurantes/registro/**").permitAll()
+                .requestMatchers("/api/restaurantes/estado/ACTIVO").permitAll()
+                .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/clientes").permitAll()
+                .requestMatchers("/api/restaurantes/**").permitAll()
+                .requestMatchers(
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/swagger-ui.html"
+                ).permitAll()
+                
+                .anyRequest().authenticated()
+            )
+            //registrar el filtro
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

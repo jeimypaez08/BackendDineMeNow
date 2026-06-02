@@ -10,9 +10,11 @@ import com.example.BackendDineMeNow.Dtos.LoginRequestDto;
 import com.example.BackendDineMeNow.Dtos.LoginResponseDto;
 import com.example.BackendDineMeNow.models.Cliente;
 import com.example.BackendDineMeNow.models.ClienteAuth;
+import com.example.BackendDineMeNow.repositories.AdminRepository;
 import com.example.BackendDineMeNow.repositories.ClienteAuthRepository;
 import com.example.BackendDineMeNow.repositories.ClienteRepository;
 import com.example.BackendDineMeNow.repositories.RestauranteRepository;
+import com.example.BackendDineMeNow.security.JwtService;
 import com.example.BackendDineMeNow.models.Rol;
 
 @Service
@@ -21,16 +23,22 @@ public class AuthServiceImpl implements AuthService {
     private final ClienteAuthRepository authRepo;
     private final ClienteRepository clienteRepo;
     private final RestauranteRepository restauranteRepo;
+    private final AdminRepository adminRepo;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService; //
 
     public AuthServiceImpl(ClienteAuthRepository authRepo, 
                            ClienteRepository clienteRepo, 
                            RestauranteRepository restaurateRepo,
-                           PasswordEncoder passwordEncoder) {
+                           AdminRepository adminRepo,
+                           PasswordEncoder passwordEncoder,
+                           JwtService jwtService) {
         this.authRepo = authRepo;
         this.clienteRepo = clienteRepo;
         this.restauranteRepo = restaurateRepo;
+        this.adminRepo = adminRepo;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -69,8 +77,10 @@ public class AuthServiceImpl implements AuthService {
             .orElseThrow(()-> new RuntimeException("Perfil de cliente no encontrado"));
 
         //5. Construir respuesta
+        String token = jwtService.generarToken(cliente.getCorreo(), auth.getRoles());
         return LoginResponseDto.builder()
             .mensaje("Login exitoso")
+            .token(token)
             .id(cliente.getId())
             .nombre(cliente.getNombreCliente())
             .apellido(cliente.getApellido())
@@ -82,8 +92,8 @@ public class AuthServiceImpl implements AuthService {
 
         //intentar como restaurante
 
-        return restauranteRepo.findByCorreo(identificador)
-            .or(()-> restauranteRepo.findByNit(identificador))
+        Optional<LoginResponseDto> restauranteRes = restauranteRepo.findByCorreo(identificador)
+            .or(() -> restauranteRepo.findByNit(identificador))
             .map(restaurante->{
                 //verificar contraseña del restaurante
                 if (!passwordEncoder.matches(dto.getPassword(), restaurante.getPassword())) {
@@ -93,16 +103,44 @@ public class AuthServiceImpl implements AuthService {
                 if(restaurante.getEstado() != com.example.BackendDineMeNow.models.EstadoRestaurante.ACTIVO){
                     throw new RuntimeException("Restaurante pendiente por aprobacion");
                 }
+
+                String token = jwtService.generarToken(restaurante.getCorreo(), List.of(Rol.ROL_RESTAURANTE));
                 //respuesta para el restaurante
                 return LoginResponseDto.builder()
                 .mensaje("Inicio de Sesion exitoso (Restaurante)")
+                .token(token)
                 .id(restaurante.getId())
                 .nombre(restaurante.getNombre())
                 .correo(restaurante.getCorreo())
                 .roles(List.of(Rol.ROL_RESTAURANTE))
+                .mustChangePassword(restaurante.getMustChangePassword())
+                .build();
+            });
+           if (restauranteRes.isPresent()) {
+            return restauranteRes.get();
+        }
+
+            //intentar como admin
+            return adminRepo.findByCorreo(identificador)
+            .map(admin -> {
+                if(!passwordEncoder.matches(dto.getPassword(), admin.getPassword())){
+                    throw new RuntimeException("Contraseña incorrecta");
+                }
+                String token = jwtService.generarToken(admin.getCorreo(), List.of(Rol.ROL_ADMIN));
+                return LoginResponseDto.builder()
+                .mensaje("Inicio de sesion exitoso")
+                .token(token)
+                .id(admin.getId())
+                .nombre("Administrador")
+                .correo(admin.getCorreo())
+                //convertir el  set<String> de roles a List<Rol> para que coincida con el dto
+                .roles(List.of(Rol.ROL_ADMIN))
                 .build();
             })
-            .orElseThrow(() -> new RuntimeException("Usuario o Restaurante no encontrado"));
+            .orElseThrow(() -> new RuntimeException("Credenciales no encontradas"));
     }
-}}
+}
+}
+
+
 

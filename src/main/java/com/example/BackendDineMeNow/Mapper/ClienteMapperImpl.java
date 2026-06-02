@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import com.example.BackendDineMeNow.Dtos.ClienteDto;
 import com.example.BackendDineMeNow.models.Cliente;
 
-@Component
+@Component //Para que Spring lo pueda inyectar donde se necesita
 public class ClienteMapperImpl implements ClienteMapper{
 
-    @Override
+    @Override 
     public Cliente toCliente(ClienteDto clienteDto) {
         if (clienteDto == null) {
             return null;
@@ -79,3 +79,6 @@ public class ClienteMapperImpl implements ClienteMapper{
     }
 
 }
+
+
+
