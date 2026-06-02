@@ -1,8 +1,11 @@
 package com.example.BackendDineMeNow.security;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -48,8 +51,18 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             String username = jwtService.extraerUsuario(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                    // 1. Extraer los roles que se guardan en el token (ej: ["ROL_ADMIN"])
+                List<String> roles = jwtService.extraerRoles(token);
+
+                // 2. Convertir esos Strings en "SimpleGrantedAuthority" para que Spring los entienda
+                List<SimpleGrantedAuthority> authorities = roles.stream()
+                     .map(SimpleGrantedAuthority::new)
+                     .collect(Collectors.toList());
+                    
+                // 3. Crear el token de autenticación incluyendo las autoridades (permisos)
                 UsernamePasswordAuthenticationToken authenticationToken = 
-                    new UsernamePasswordAuthenticationToken(username, null, new java.util.ArrayList<>());
+                    new UsernamePasswordAuthenticationToken(username, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
