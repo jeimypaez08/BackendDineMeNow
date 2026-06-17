@@ -2,6 +2,7 @@ package com.example.BackendDineMeNow.security;
 
 import java.util.Set;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import com.example.BackendDineMeNow.models.Admin;
 import com.example.BackendDineMeNow.repositories.AdminRepository;
 
 @Component
-public class AdminInitializer {
+public class AdminInitializer implements CommandLineRunner {
     private final AdminRepository adminRepo;
     private final PasswordEncoder passwordEncoder;
 
@@ -18,7 +19,7 @@ public class AdminInitializer {
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    @Override
     public void run(String...args) throws Exception {
         String correoAdmin = "admin@dinemenow.com";
 
