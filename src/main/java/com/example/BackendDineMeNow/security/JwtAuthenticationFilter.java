@@ -30,13 +30,13 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             String path = request.getServletPath();
 
             //si es registro o verificacion, que pase
-            if(path.equals("/api/clientes/registro") || 
+            if(path.trim().startsWith("/api/auth/login") || 
+            path.equals("/api/clientes/registro") ||
             path.startsWith("/api/verificacion") ||
             path.equals("/api/restaurantes/registro") ||
-            path.equals("/api/auth/login") ||
-            path.equals("/api/clientes") ||
-            path.startsWith("/api/restaurantes") ||
-            path.startsWith("/api/restaurantes/estado/ACTIVO")
+            path.startsWith("/api/restaurantes/estado/ACTIVO") ||
+            path.startsWith("/swagger-ui") ||
+            path.startsWith("/v3/api-docs")
         ){
                 filterChain.doFilter(request, response);
         return; // IMPORTANTE: Cortamos la ejecución aquí para que no intente buscar el token
