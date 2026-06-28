@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.BackendDineMeNow.Dtos.ReservaDto;
 import com.example.BackendDineMeNow.Services.ReservaService;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -28,8 +29,9 @@ public class ReservaController {
 
     // Crear reserva
     @PostMapping("/CrearReservas")
-    public ResponseEntity<ReservaDto> createReserva(@RequestBody ReservaDto reservaDto) {
-        ReservaDto creando = reservaService.crearReserva(reservaDto);
+    public ResponseEntity<ReservaDto> createReserva(@RequestBody ReservaDto reservaDto, Authentication authentication) {
+        String username = authentication.getName();
+        ReservaDto creando = reservaService.crearReserva(reservaDto, username);
         return ResponseEntity.status(HttpStatus.CREATED).body(creando);
     }
 
@@ -38,6 +40,19 @@ public class ReservaController {
     public ResponseEntity<List<ReservaDto>> obtenerReserva() {
         return ResponseEntity.ok(reservaService.listaReservas());
     }
+
+    //listar reserva ppor id cliente
+    @GetMapping("/mis-reservas")
+public ResponseEntity<List<ReservaDto>> obtenerPorCliente(
+        Authentication authentication){
+
+            String username = authentication.getName();
+
+    return ResponseEntity.ok(
+        reservaService.listarPorCliente(username)
+    );
+
+}
 
     // Listar reservas por nit del restaurante
     @GetMapping("/restaurante/{nitRestaurante}")

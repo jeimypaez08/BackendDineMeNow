@@ -33,7 +33,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             if(path.trim().startsWith("/api/auth/login") || 
             path.equals("/api/clientes/registro") ||
             path.startsWith("/api/verificacion") ||
-            path.equals("/api/restaurantes/registro") ||
+            path.startsWith("/api/restaurantes/registro") ||
             path.startsWith("/api/restaurantes/estado/ACTIVO") ||
             path.startsWith("/swagger-ui") ||
             path.startsWith("/v3/api-docs")

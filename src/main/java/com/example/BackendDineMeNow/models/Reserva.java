@@ -21,6 +21,7 @@ public class Reserva {
     //BackEnd
     @Id
     private String id;
+    private String idCliente;
     private String nitRestaurante;
     private String nombreCliente;
     private List<String> nomPlato;

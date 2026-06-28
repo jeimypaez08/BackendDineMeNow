@@ -26,4 +26,5 @@ public class Platos {
     private String desc;
     private double precio;
     private List<Categorias> categ; //Lista de categorias
+    private boolean disponible;
 }
