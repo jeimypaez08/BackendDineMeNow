@@ -32,6 +32,13 @@ public List<PlatosDto> listarPlatos() {
     return platosMapper.toPlatosDtoList(platosRepository.findAll());
 }
 
+//Listar platos por id
+@Override
+public List<PlatosDto> listarPorIdRestau(String id) {
+    List<Platos> platos = platosRepository.findByidplatos(id);
+    return platosMapper.toPlatosDtoList(platos);
+}
+
 //Listar platos por restaurante
 @Override
 public List<PlatosDto> listarPorRestaurante(String nitRestaurante){

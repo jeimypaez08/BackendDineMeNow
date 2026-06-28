@@ -7,13 +7,13 @@ import com.example.BackendDineMeNow.Dtos.ReservaDto;
 
 public interface ReservaService {
 
-    ReservaDto crearReserva(ReservaDto reservaDto);
+    ReservaDto crearReserva(ReservaDto reservaDto, String username);
+
 
     List<ReservaDto> listaReservas();
     List<ReservaDto> listarPorNit(String nitRestaurante);
     List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha);
-
-    
+    List<ReservaDto> listarPorCliente(String username);
 
     ReservaDto actReserva(String id, ReservaDto reservaDto);
 

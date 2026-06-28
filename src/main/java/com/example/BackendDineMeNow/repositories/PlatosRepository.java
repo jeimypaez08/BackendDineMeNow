@@ -14,6 +14,8 @@ public interface PlatosRepository extends MongoRepository<Platos, String> {
     List<Platos> findByNomPlatoContainingIgnoreCase(String nomPlato);
     //buscar plato por categoria
     List<Platos> findByCategIn(List<Categorias> categ);
+    //buscar plato por id
+    List<Platos> findByidplatos(String id);
 
     //buscar por nombre y que el precio sea menor o igual al valor enviado
     List<Platos> findByNomPlatoContainingIgnoreCaseAndPrecioLessThanEqual(String nomPlato, double precioMax);

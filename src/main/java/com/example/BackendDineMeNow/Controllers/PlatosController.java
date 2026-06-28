@@ -32,6 +32,7 @@ public class PlatosController {
     // Crear plato
     @PostMapping("/crearPlato")
     public ResponseEntity<PlatosDto> crearPlato(@RequestBody PlatosDto platosDto) {
+         System.out.println("=== ENTRO A CREAR PLATO ===");
         PlatosDto creando = platosService.crearPlatos(platosDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creando);
     }
@@ -47,6 +48,12 @@ public class PlatosController {
     public ResponseEntity<List<PlatosDto>> obtenerPlatosPorRestaurante(@PathVariable String nitRestaurante) {
         return ResponseEntity.ok(platosService.listarPorRestaurante(nitRestaurante));
     }
+
+        //listar platos por id
+        @GetMapping("/listarPlatos/id/{id}")
+        public ResponseEntity<List<PlatosDto>> obtenerPlatosPorId(@PathVariable String id) {
+            return ResponseEntity.ok(platosService.listarPorIdRestau(id));
+        }
 
     // Buscar platos por nombre: /api/platos/buscar?nomPlato=Ajiaco
     //El signo ? separa la dirección de la página de los filtros.

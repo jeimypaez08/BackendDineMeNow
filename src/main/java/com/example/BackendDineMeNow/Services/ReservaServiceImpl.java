@@ -7,24 +7,34 @@ import org.springframework.stereotype.Service;
 
 import com.example.BackendDineMeNow.Dtos.ReservaDto;
 import com.example.BackendDineMeNow.Mapper.ReservaMapper;
+import com.example.BackendDineMeNow.models.Cliente;
 import com.example.BackendDineMeNow.models.EstadoReserva;
 import com.example.BackendDineMeNow.models.Reserva;
+import com.example.BackendDineMeNow.repositories.ClienteRepository;
 import com.example.BackendDineMeNow.repositories.ReservaRepository;
 
 @Service
 public class ReservaServiceImpl implements ReservaService {
     private final ReservaRepository reservaRepository;
-
+    private final ClienteRepository clienteRepository;
     private final ReservaMapper reservaMapper;
 
-    public ReservaServiceImpl(ReservaRepository reservaRepository, ReservaMapper reservaMapper) {
+    public ReservaServiceImpl(ReservaRepository reservaRepository, ReservaMapper reservaMapper, ClienteRepository clienteRepository) {
         this.reservaRepository = reservaRepository;
         this.reservaMapper = reservaMapper;
+        this.clienteRepository = clienteRepository;
     }
+
 
     // Crear reserva
     @Override
-    public ReservaDto crearReserva(ReservaDto reservaDto) {
+    public ReservaDto crearReserva(ReservaDto reservaDto, String username) {
+
+        Cliente cliente = clienteRepository
+        .findByCorreo(username)
+        .orElseThrow(() ->
+                new RuntimeException("Cliente no encontrado"));
+
         //validar si la mesa ya esta ocupada, si la fecha y hora ya esta ocupada, etc.
         boolean mesaOcupada = reservaRepository.existsByNitRestauranteAndNumMesaAndFechaAndHora(
                 reservaDto.getNitRestaurante(), 
@@ -39,6 +49,8 @@ public class ReservaServiceImpl implements ReservaService {
 
         //2.convertir el dto a modelo
         Reserva reserva = reservaMapper.toReserva(reservaDto);
+
+         reserva.setIdCliente(cliente.getId());
 
         //3. forzar estado inicial a "pendiente" por si el frontend no lo envia o envia otro estado
         if(reserva.getEstado() == null){//si el estado no es enviado por el frontend, se asigna el estado pendiente por defecto
@@ -67,6 +79,19 @@ public class ReservaServiceImpl implements ReservaService {
     public List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha) {
         return reservaMapper.toReservaDtoList(reservaRepository.findByNitRestauranteAndFecha(nitRestaurante, fecha));
     }
+
+    //listar por cliente
+    @Override
+public List<ReservaDto> listarPorCliente(String username) {
+
+    Cliente cliente = clienteRepository.findByCorreo(username).orElseThrow(()->
+            new RuntimeException("Cliente no encontrado"));
+
+    return reservaMapper.toReservaDtoList(
+        reservaRepository.findByIdCliente(cliente.getId())
+    );
+
+}
 
     // Actualizar reserva
     @Override

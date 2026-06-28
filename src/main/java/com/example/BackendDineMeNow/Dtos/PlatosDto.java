@@ -21,4 +21,5 @@ public class PlatosDto {
     private String descripcion;
     private double precio;
     private List<Categorias> categoria;
+    private boolean disponible;
 }

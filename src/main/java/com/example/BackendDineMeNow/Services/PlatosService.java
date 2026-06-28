@@ -11,6 +11,7 @@ public interface  PlatosService {
     
     List<PlatosDto> listarPlatos();
     List<PlatosDto> listarPorRestaurante(String nitRestaurante);
+    List<PlatosDto> listarPorIdRestau(String id);
     List<PlatosDto> listarPorNombre(String nomPlato);
     List<PlatosDto> listarPorCategoria(List<Categorias> categ);
     List<PlatosDto> listarPorNombreYPrecioMax(String nomPlato, double precioMax);

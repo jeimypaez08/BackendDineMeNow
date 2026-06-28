@@ -33,4 +33,4 @@ build/
 .vscode/
 
 #seguridad-no subir variables de entorno
-.env*
+.env

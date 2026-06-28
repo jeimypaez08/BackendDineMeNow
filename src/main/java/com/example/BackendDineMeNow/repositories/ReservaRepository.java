@@ -16,4 +16,7 @@ public interface ReservaRepository extends MongoRepository<Reserva, String> {
     List<Reserva> findByNitRestaurante(String nitRestaurante);
     List<Reserva> findByNitRestauranteAndFecha(String nitRestaurante, LocalDate fecha);
 
+    //buscar reserva por id de cliente
+    List<Reserva> findByIdCliente(String idCliente);
+
 }

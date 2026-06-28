@@ -24,6 +24,7 @@ public class PlatosMapperImpl implements PlatosMapper {
             .desc(platosDto.getDescripcion())
             .precio(platosDto.getPrecio())
             .categ(platosDto.getCategoria())
+            .disponible(platosDto.isDisponible())
             .build();
     }
 
@@ -40,6 +41,7 @@ public class PlatosMapperImpl implements PlatosMapper {
             .descripcion(platos.getDesc())
             .precio(platos.getPrecio())
             .categoria(platos.getCateg())
+            .disponible(platos.isDisponible())
             .build();
     }
 
@@ -70,6 +72,7 @@ public class PlatosMapperImpl implements PlatosMapper {
         platos.setDesc(platosDto.getDescripcion());
         platos.setPrecio(platosDto.getPrecio());
         platos.setCateg(platosDto.getCategoria());
+        platos.setDisponible(platosDto.isDisponible()); 
     }
 
 }

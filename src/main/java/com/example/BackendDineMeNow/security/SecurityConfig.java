@@ -47,11 +47,47 @@ public class SecurityConfig {
 
                 //rutas de reservas
                 //crear o ver reservas del usuario actual
-                .requestMatchers("/api/reservas/**").hasAnyAuthority("ROL_ADMIN", "ROL_CLIENTE")
+                .requestMatchers("/api/reservas/**").hasAnyAuthority("ROL_ADMIN", "ROL_CLIENTE", "ROL_RESTAURANTE")
+                .requestMatchers("/api/reservas/restaurante/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE")
+
+                //ruta mesas
+                .requestMatchers(HttpMethod.GET, "/api/mesas/**")
+                .hasAnyAuthority(
+                    "ROL_ADMIN",
+                    "ROL_RESTAURANTE",
+                    "ROL_CLIENTE"
+                    )
+
+                .requestMatchers("/api/mesas/**")
+                .hasAnyAuthority(
+                    "ROL_ADMIN",
+                    "ROL_RESTAURANTE"
+                    )
+
+                    //ruta platos
+                    .requestMatchers(HttpMethod.GET, "/api/platos/**")
+                .hasAnyAuthority(
+                    "ROL_ADMIN",
+                    "ROL_RESTAURANTE",
+                    "ROL_CLIENTE"
+                    )
+
+                .requestMatchers("/api/platos/**")
+                .hasAnyAuthority(
+                    "ROL_ADMIN",
+                    "ROL_RESTAURANTE"
+                    )
+
+                .requestMatchers(HttpMethod.GET, "/api/restaurantes/**").authenticated() // Cualquier usuario logueado con token válido puede leerlo
+                .requestMatchers("/api/restaurantes/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE")
 
                 //rutas de restaurantes
                 // El cambio de contraseña obligatorio para activar la cuenta
                 .requestMatchers(HttpMethod.PUT, "/api/restaurantes/*/cambiar-password").hasAuthority("ROL_RESTAURANTE")
+
+                //rutas de platos
+                .requestMatchers(HttpMethod.GET, "/api/platos/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE", "ROL_CLIENTE")
+                .requestMatchers("/api/platos/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE")
 
                 // Modificar datos específicos del restaurante (El dueño o el Admin)
                 .requestMatchers(HttpMethod.PUT, "/api/restaurantes/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE")
