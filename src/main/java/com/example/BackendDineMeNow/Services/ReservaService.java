@@ -12,6 +12,7 @@ public interface ReservaService {
 
     List<ReservaDto> listaReservas();
     List<ReservaDto> listarPorNit(String nitRestaurante);
+    List<ReservaDto> listarPorNombre(String nombre);
     List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha);
     List<ReservaDto> listarPorCliente(String username);
 

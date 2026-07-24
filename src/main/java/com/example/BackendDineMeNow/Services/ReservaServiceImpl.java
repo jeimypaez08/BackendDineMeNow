@@ -74,6 +74,12 @@ public class ReservaServiceImpl implements ReservaService {
         return reservaMapper.toReservaDtoList(reservaRepository.findByNitRestaurante(nitRestaurante));
     }
 
+    //listar reservas por nombre del restaurante
+    @Override
+    public List<ReservaDto> listarPorNombre(String nombre) {
+        return reservaMapper.toReservaDtoList(reservaRepository.findByNombreRestaurante(nombre));
+    }
+
     //listar por fecha y nit del restaurante
     @Override
     public List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha) {

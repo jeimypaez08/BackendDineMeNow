@@ -60,6 +60,13 @@ public ResponseEntity<List<ReservaDto>> obtenerPorCliente(
         return ResponseEntity.ok(reservaService.listarPorNit(nitRestaurante));
     }
 
+    //listar reserva por nombre
+    @GetMapping("/restaurante/nombre/{nombre}")
+    public ResponseEntity<List<ReservaDto>> obtenerReservaPorNombre(
+            @PathVariable String nombre) {
+        return ResponseEntity.ok(reservaService.listarPorNombre(nombre));
+    }
+
     // Actualizar reserva
     @PutMapping("/actuReserva/{id}")
     public ResponseEntity<ReservaDto> actualizarReserva(@PathVariable String id, @RequestBody ReservaDto reservaDto) {

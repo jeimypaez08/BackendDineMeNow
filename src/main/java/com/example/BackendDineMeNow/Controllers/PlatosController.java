@@ -55,6 +55,8 @@ public class PlatosController {
             return ResponseEntity.ok(platosService.listarPorIdRestau(id));
         }
 
+        
+
     // Buscar platos por nombre: /api/platos/buscar?nomPlato=Ajiaco
     //El signo ? separa la dirección de la página de los filtros.
     //flexibilidad: en el futuro buscamos por nombre Y por precio máximo. Con query params es fácil:
