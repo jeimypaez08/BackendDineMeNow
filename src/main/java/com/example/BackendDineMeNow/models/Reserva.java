@@ -30,4 +30,5 @@ public class Reserva {
     private LocalTime hora;
     private String descrip;
     private EstadoReserva estado;
+    private String nombreRestaurante;
 }
