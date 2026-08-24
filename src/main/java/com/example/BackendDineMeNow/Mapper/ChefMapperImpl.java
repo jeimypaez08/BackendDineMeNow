@@ -17,7 +17,7 @@ public class ChefMapperImpl implements ChefMapper {
         }
     return Chef.builder()
         .id(chefDto.getId())
-        .id_platos(chefDto.getId_platos())
+        .nitRestaurante(chefDto.getNitRestaurante())
         .build();
 }
     @Override
@@ -27,7 +27,7 @@ public class ChefMapperImpl implements ChefMapper {
         }
         return ChefDto.builder()
         .id(chef.getId())
-        .id_platos(chef.getId_platos())
+        .nitRestaurante(chef.getNitRestaurante())
         .build();
     }
 
@@ -49,7 +49,9 @@ public class ChefMapperImpl implements ChefMapper {
         if (chefDto == null){
             throw new IllegalArgumentException("El chefDto esta vacio");
         }
-        chef.setId(chefDto.getId());
-        chef.setId_platos(chefDto.getId_platos());
+        
+        if (chefDto.getNitRestaurante() != null){
+            chef.setNitRestaurante(chefDto.getNitRestaurante());
+        }
     }
 }

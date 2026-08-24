@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class ChefDto {
 //Frontend
 private String id;
-private String id_platos;
+private String nitRestaurante;
 }
