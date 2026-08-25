@@ -10,9 +10,12 @@ import com.example.BackendDineMeNow.Dtos.LoginRequestDto;
 import com.example.BackendDineMeNow.Dtos.LoginResponseDto;
 import com.example.BackendDineMeNow.models.Cliente;
 import com.example.BackendDineMeNow.models.ClienteAuth;
+import com.example.BackendDineMeNow.models.EmpleadoAuth;
 import com.example.BackendDineMeNow.repositories.AdminRepository;
 import com.example.BackendDineMeNow.repositories.ClienteAuthRepository;
 import com.example.BackendDineMeNow.repositories.ClienteRepository;
+import com.example.BackendDineMeNow.repositories.EmpleadoAuthRepository;
+import com.example.BackendDineMeNow.repositories.EmpleadoRepository;
 import com.example.BackendDineMeNow.repositories.RestauranteRepository;
 import com.example.BackendDineMeNow.security.JwtService;
 import com.example.BackendDineMeNow.models.Rol;
@@ -24,6 +27,8 @@ public class AuthServiceImpl implements AuthService {
     private final ClienteRepository clienteRepo;
     private final RestauranteRepository restauranteRepo;
     private final AdminRepository adminRepo;
+    private final EmpleadoAuthRepository empleadoAuthRepo;
+    private final EmpleadoRepository empleadoRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService; //
 
@@ -31,12 +36,16 @@ public class AuthServiceImpl implements AuthService {
                            ClienteRepository clienteRepo, 
                            RestauranteRepository restaurateRepo,
                            AdminRepository adminRepo,
+                           EmpleadoAuthRepository empleadoAuthRepo,
+                           EmpleadoRepository empleadoRepo,
                            PasswordEncoder passwordEncoder,
                            JwtService jwtService) {
         this.authRepo = authRepo;
         this.clienteRepo = clienteRepo;
         this.restauranteRepo = restaurateRepo;
         this.adminRepo = adminRepo;
+        this.empleadoAuthRepo = empleadoAuthRepo;
+        this.empleadoRepo = empleadoRepo;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
@@ -119,6 +128,34 @@ public class AuthServiceImpl implements AuthService {
            if (restauranteRes.isPresent()) {
             return restauranteRes.get();
         }
+
+        // Intentar como Empleado (Únicamente por correo en Empleado, recuperando pass de EmpleadoAuth)
+            Optional<LoginResponseDto> empleadoRes = empleadoRepo.findByCorreo(identificador)
+                .map(empleado -> {
+                    EmpleadoAuth empleadoAuth = empleadoAuthRepo.findById(empleado.getId())
+                        .orElseThrow(() -> new RuntimeException("Credenciales no encontradas para el empleado"));
+
+                    if (!passwordEncoder.matches(dto.getPassword(), empleadoAuth.getPass())) {
+                        throw new RuntimeException("Contraseña incorrecta");
+                    }
+
+                    List<Rol> roles = List.of(empleado.getRol());
+                    String token = jwtService.generarToken(empleado.getCorreo(), roles);
+
+                    return LoginResponseDto.builder()
+                        .mensaje("Inicio de sesion exitoso (" + empleado.getRol() + ")")
+                        .token(token)
+                        .id(empleado.getId())
+                        .nombre(empleado.getNombre())
+                        .apellido(empleado.getApellido())
+                        .correo(empleado.getCorreo())
+                        .roles(roles)
+                        .build();
+                });
+
+            if (empleadoRes.isPresent()) {
+                return empleadoRes.get();
+            }
 
             //intentar como admin
             return adminRepo.findByCorreo(identificador)
