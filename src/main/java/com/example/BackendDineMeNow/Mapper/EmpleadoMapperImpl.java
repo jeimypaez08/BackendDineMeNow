@@ -43,6 +43,7 @@ public class EmpleadoMapperImpl implements EmpleadoMapper{// Implementación de 
             .telefono(empleado.getTelefono())
             .correo(empleado.getCorreo())
             .eps(empleado.getEps())
+            .arl(empleado.getArl())
             .direccion(empleado.getDireccion())
             .rol(empleado.getRol())
             .estado(empleado.getEstado())
