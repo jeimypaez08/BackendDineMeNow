@@ -96,7 +96,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/restaurantes/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE", "ROL_CLIENTE")
 
                 //ruta de empleados
-                .requestMatchers("/api/empleados/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE")
+                .requestMatchers("/api/empleados/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE", "ROL_MESERO", "ROL_CHEF")
 
                 
                 //proteccion total
