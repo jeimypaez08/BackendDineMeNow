@@ -19,6 +19,7 @@ public class ReservaDto {
     private String id;
     private String idCliente;
     private String nitRestaurante;
+    private String nombreRestaurante;//nombre del restaurante, se puede cambiar a una referencia al restaurante si se desea
     private String nombreCliente;//nombre del cliente que hizo la reserva, se puede cambiar a una referencia al cliente si se desea, telefono o correo para contacto
     private List<String> nombrePlatos;//nombre del plato reservado, se puede cambiar a una lista si se permite reservar varios platos
     private String numeroMesa;
