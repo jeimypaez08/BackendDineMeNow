@@ -36,11 +36,12 @@ public class ReservaServiceImpl implements ReservaService {
                 new RuntimeException("Cliente no encontrado"));
 
         //validar si la mesa ya esta ocupada, si la fecha y hora ya esta ocupada, etc.
-        boolean mesaOcupada = reservaRepository.existsByNitRestauranteAndNumMesaAndFechaAndHora(
-                reservaDto.getNitRestaurante(), 
+        boolean mesaOcupada = reservaRepository.existsByNitRestauranteAndNumMesaAndFechaAndHoraAndNombreRestaurante(
+                reservaDto.getNitRestaurante(),
                 reservaDto.getNumeroMesa(), 
                 reservaDto.getFecha(), 
-                reservaDto.getHora()
+                reservaDto.getHora(),
+                reservaDto.getNombreRestaurante()
             );
 
         if (mesaOcupada) {
@@ -84,6 +85,12 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha) {
         return reservaMapper.toReservaDtoList(reservaRepository.findByNitRestauranteAndFecha(nitRestaurante, fecha));
+    }
+
+    //listar por fecha y nombre del restaurante
+    @Override
+    public List<ReservaDto> listarPorFechaYnombreRestaurante(String nombreRestaurante, LocalDate fecha) {
+        return reservaMapper.toReservaDtoList(reservaRepository.findByNombreRestauranteAndFecha(nombreRestaurante, fecha));
     }
 
     //listar por cliente

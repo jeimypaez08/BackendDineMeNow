@@ -12,9 +12,10 @@ public interface ReservaService {
 
     List<ReservaDto> listaReservas();
     List<ReservaDto> listarPorNit(String nitRestaurante);
-    List<ReservaDto> listarPorNombre(String nombre);
+    List<ReservaDto> listarPorNombre(String nombreRestaurante);
     List<ReservaDto> listarPorFechaYnit(String nitRestaurante, LocalDate fecha);
     List<ReservaDto> listarPorCliente(String username);
+    List<ReservaDto> listarPorFechaYnombreRestaurante(String nombreRestaurante, LocalDate fecha);
 
     ReservaDto actReserva(String id, ReservaDto reservaDto);
 
