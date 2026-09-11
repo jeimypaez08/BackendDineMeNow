@@ -154,6 +154,27 @@ public ClienteDto obtenerClientePorDocumento(String numero) {
         clienteRepo.deleteById(id);
     }
 
+@Override
+    public void cambiarPasswordPorDocumento(String documento, String passwordActual, String passwordNueva) {
+        Cliente cliente = clienteRepo.findByDocumentoNumero(documento)
+            .orElseThrow(() -> new java.util.NoSuchElementException("Cliente no encontrado con documento: " + documento));
+
+        cambiarPasswordPorId(cliente.getId(), passwordActual, passwordNueva);
+    }
+
+    @Override
+    public void cambiarPasswordPorId(String id, String passwordActual, String passwordNueva) {
+        ClienteAuth auth = authRepo.findById(id)
+            .orElseThrow(() -> new java.util.NoSuchElementException("Credenciales de usuario no encontradas para el ID: " + id));
+
+        if (!passwordEncoder.matches(passwordActual, auth.getPass())) {
+            throw new org.springframework.security.authentication.BadCredentialsException("La contraseña actual es incorrecta");
+        }
+
+        auth.setPass(passwordEncoder.encode(passwordNueva));
+        authRepo.save(auth);
+    }
+
 
 
 }

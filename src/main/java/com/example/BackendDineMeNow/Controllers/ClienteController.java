@@ -2,6 +2,7 @@ package com.example.BackendDineMeNow.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.BackendDineMeNow.Dtos.CambiarContraDto;
 import com.example.BackendDineMeNow.Dtos.ClienteDto;
 import com.example.BackendDineMeNow.Dtos.ClienteRegistroDto;
 import com.example.BackendDineMeNow.Services.ClienteService;
@@ -87,5 +88,31 @@ public ResponseEntity<ClienteDto> obtenerPorDocumento(@PathVariable String numer
         clienteService.eliminarCliente(id);
         return ResponseEntity.noContent().build();
     }
+// Cambiar contraseña por ID -> PUT /api/clientes/{id}/cambiar-password
+    @PutMapping("/{id}/cambiar-password")
+    public ResponseEntity<Void> cambiarPasswordPorId(
+            @PathVariable String id, 
+            @RequestBody CambiarContraDto cambiarContraDto) {
+        
+        clienteService.cambiarPasswordPorId(
+            id, 
+            cambiarContraDto.getPasswordActual(), 
+            cambiarContraDto.getPasswordNueva()
+        );
+        return ResponseEntity.noContent().build();
+    }
 
+    // Cambiar contraseña por Documento -> PUT /api/clientes/documento/{documento}/cambiar-password
+    @PutMapping("/documento/{documento}/cambiar-password")
+    public ResponseEntity<Void> cambiarPasswordPorDocumento(
+            @PathVariable String documento, 
+            @RequestBody CambiarContraDto cambiarContraDto) {
+        
+        clienteService.cambiarPasswordPorDocumento(
+            documento, 
+            cambiarContraDto.getPasswordActual(), 
+            cambiarContraDto.getPasswordNueva()
+        );
+        return ResponseEntity.noContent().build();
+    }
 }
