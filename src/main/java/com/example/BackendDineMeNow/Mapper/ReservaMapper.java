@@ -13,5 +13,7 @@ public interface ReservaMapper {
     
     List<ReservaDto> toReservaDtoList(List<Reserva> reservas);
 
+    
+
     void actualizarReserva(ReservaDto reservaDto, Reserva reserva);
 }
