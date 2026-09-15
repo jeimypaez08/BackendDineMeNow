@@ -10,4 +10,6 @@ public interface EmailService {
 
     void enviarCodigoVerificacion(String correoDestino, String nombre, String codigo); // Método para enviar el código de verificación al cliente
 
+    void enviarCodigoRecuperacion(String correoDestino, String nombre, String codigo); // Método para enviar el código de verificación al cliente
+
 }

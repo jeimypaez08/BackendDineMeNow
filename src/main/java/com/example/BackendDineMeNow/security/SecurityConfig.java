@@ -30,6 +30,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 //rutas publicas
                 .requestMatchers("/api/auth/login", 
+                                "/api/auth/recuperar-password/**",
+                                "/api/auth/login",
+                                "/api/auth/recuperar-password/solicitar",
+                                "/api/auth/recuperar-password/verificar-codigo",
+                                "/api/auth/recuperar-password/cambiar",
                                  "/api/clientes/registro",
                                  "/api/verificacion/**", 
                                  "/api/restaurantes/registro/**",

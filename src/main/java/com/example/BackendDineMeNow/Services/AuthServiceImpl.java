@@ -1,13 +1,19 @@
 package com.example.BackendDineMeNow.Services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.security.SecureRandom;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.BackendDineMeNow.Dtos.LoginRequestDto;
 import com.example.BackendDineMeNow.Dtos.LoginResponseDto;
+import com.example.BackendDineMeNow.Dtos.CambiarPasswordRecuperacionDto;
+import com.example.BackendDineMeNow.Dtos.ResetTokenResponseDto;
+import com.example.BackendDineMeNow.Dtos.SolicitarRecuperacionDto;
+import com.example.BackendDineMeNow.Dtos.VerificarCodigoRecuperacionDto;
 import com.example.BackendDineMeNow.models.Cliente;
 import com.example.BackendDineMeNow.models.ClienteAuth;
 import com.example.BackendDineMeNow.models.EmpleadoAuth;
@@ -17,6 +23,8 @@ import com.example.BackendDineMeNow.repositories.ClienteRepository;
 import com.example.BackendDineMeNow.repositories.EmpleadoAuthRepository;
 import com.example.BackendDineMeNow.repositories.EmpleadoRepository;
 import com.example.BackendDineMeNow.repositories.RestauranteRepository;
+import com.example.BackendDineMeNow.repositories.RecuperacionPasswordRepository;
+import com.example.BackendDineMeNow.models.RecuperacionPassword;
 import com.example.BackendDineMeNow.security.JwtService;
 import com.example.BackendDineMeNow.models.Rol;
 
@@ -31,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
     private final EmpleadoRepository empleadoRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService; //
+    private final RecuperacionPasswordRepository recuperacionRepo;
+    private final EmailService emailService;
 
     public AuthServiceImpl(ClienteAuthRepository authRepo, 
                            ClienteRepository clienteRepo, 
@@ -39,7 +49,9 @@ public class AuthServiceImpl implements AuthService {
                            EmpleadoAuthRepository empleadoAuthRepo,
                            EmpleadoRepository empleadoRepo,
                            PasswordEncoder passwordEncoder,
-                           JwtService jwtService) {
+                           JwtService jwtService,
+                           RecuperacionPasswordRepository recuperacionRepo,
+                           EmailService emailService) {
         this.authRepo = authRepo;
         this.clienteRepo = clienteRepo;
         this.restauranteRepo = restaurateRepo;
@@ -48,6 +60,8 @@ public class AuthServiceImpl implements AuthService {
         this.empleadoRepo = empleadoRepo;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.recuperacionRepo = recuperacionRepo;
+        this.emailService = emailService;
     }
 
     @Override
@@ -174,8 +188,80 @@ public class AuthServiceImpl implements AuthService {
                 .roles(List.of(Rol.ROL_ADMIN))
                 .build();
             })
-            .orElseThrow(() -> new RuntimeException("Credenciales no encontradas"));
+            .orElseThrow(() -> new RuntimeException("Credenciales no encontradas"));}}
+
+    
+    @Override
+    public void solicitarRecuperacion(SolicitarRecuperacionDto dto) {
+        String correo = dto.getCorreo() == null ? "" : dto.getCorreo().trim().toLowerCase();
+        if (correo.isBlank()) {
+            throw new IllegalArgumentException("El correo es obligatorio");
+        }
+
+        Optional<Cliente> clienteOptional = clienteRepo.findByCorreo(correo);
+        if (clienteOptional.isEmpty()) {
+            // Respuesta genérica para no revelar si un correo está registrado.
+            return;
+        }
+
+        Cliente cliente = clienteOptional.get();
+        recuperacionRepo.deleteByCorreo(correo);
+
+        String codigo = String.format("%06d", new SecureRandom().nextInt(1_000_000));
+
+        RecuperacionPassword recuperacion = RecuperacionPassword.builder()
+                .correo(correo)
+                .codigo(codigo)
+                .fechaCreacion(new Date())
+                .build();
+
+        recuperacionRepo.save(recuperacion);
+        emailService.enviarCodigoRecuperacion(correo, cliente.getNombreCliente(), codigo);
     }
+
+    @Override
+    public ResetTokenResponseDto verificarCodigoRecuperacion(VerificarCodigoRecuperacionDto dto) {
+        String correo = dto.getCorreo() == null ? "" : dto.getCorreo().trim().toLowerCase();
+        String codigo = dto.getCodigo() == null ? "" : dto.getCodigo().trim();
+
+        RecuperacionPassword recuperacion = recuperacionRepo.findByCorreoAndCodigo(correo, codigo)
+                .orElseThrow(() -> new IllegalArgumentException("Código incorrecto o ha expirado"));
+
+        if (clienteRepo.findByCorreo(correo).isEmpty()) {
+            recuperacionRepo.delete(recuperacion);
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
+        // El OTP es de un solo uso. Una vez validado, se elimina.
+        recuperacionRepo.delete(recuperacion);
+
+        String resetToken = jwtService.generarResetToken(correo);
+        return ResetTokenResponseDto.builder()
+                .resetToken(resetToken)
+                .build();
+    }
+
+    @Override
+    public void cambiarPasswordConToken(String resetToken, CambiarPasswordRecuperacionDto dto) {
+        if (dto == null || dto.getPassword() == null || dto.getPassword().isBlank()) {
+            throw new IllegalArgumentException("La nueva contraseña es obligatoria");
+        }
+
+        if (dto.getPassword().length() < 6) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres");
+        }
+
+        String correo = jwtService.validarResetTokenYExtraerCorreo(resetToken);
+
+        Cliente cliente = clienteRepo.findByCorreo(correo)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        ClienteAuth auth = authRepo.findById(cliente.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Credenciales no encontradas para el cliente"));
+
+        auth.setPass(passwordEncoder.encode(dto.getPassword()));
+        authRepo.save(auth);
+    
 }
 }
 

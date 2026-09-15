@@ -31,6 +31,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
 
             //si es registro o verificacion, que pase
             if(path.trim().startsWith("/api/auth/login") || 
+             path.startsWith("/api/auth/recuperar-password/")||
             path.equals("/api/clientes/registro") ||
             path.startsWith("/api/verificacion") ||
             path.startsWith("/api/restaurantes/registro") ||
