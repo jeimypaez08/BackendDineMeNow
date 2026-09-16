@@ -29,14 +29,14 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 //rutas publicas
-                .requestMatchers("/api/auth/login", 
+                .requestMatchers("/api/auth/login",
                                 "/api/auth/recuperar-password/**",
                                 "/api/auth/login",
                                 "/api/auth/recuperar-password/solicitar",
                                 "/api/auth/recuperar-password/verificar-codigo",
                                 "/api/auth/recuperar-password/cambiar",
                                  "/api/clientes/registro",
-                                 "/api/verificacion/**", 
+                                 "/api/verificacion/**",
                                  "/api/restaurantes/registro/**",
                                  "/api/restaurantes/estado/ACTIVO"
                 ).permitAll()
@@ -52,7 +52,7 @@ public class SecurityConfig {
 
                 //rutas de reservas
                 //crear o ver reservas del usuario actual
-                .requestMatchers("/api/reservas/**").hasAnyAuthority("ROL_ADMIN", "ROL_CLIENTE", "ROL_RESTAURANTE")
+                .requestMatchers("/api/reservas/**").hasAnyAuthority("ROL_ADMIN", "ROL_CLIENTE", "ROL_RESTAURANTE", "ROL_MESERO", "ROL_CHEF")
                 .requestMatchers("/api/reservas/restaurante/**").hasAnyAuthority("ROL_ADMIN", "ROL_RESTAURANTE")
 
                 //ruta mesas
@@ -66,7 +66,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/mesas/**")
                 .hasAnyAuthority(
                     "ROL_ADMIN",
-                    "ROL_RESTAURANTE"
+                    "ROL_RESTAURANTE",
+                    "ROL_MESERO",
+                    "ROL_CHEF"
                     )
 
                     //ruta platos
@@ -74,7 +76,9 @@ public class SecurityConfig {
                 .hasAnyAuthority(
                     "ROL_ADMIN",
                     "ROL_RESTAURANTE",
-                    "ROL_CLIENTE"
+                    "ROL_CLIENTE",
+                    "ROL_MESERO",
+                    "ROL_CHEF"
                     )
 
                 .requestMatchers("/api/platos/**")
