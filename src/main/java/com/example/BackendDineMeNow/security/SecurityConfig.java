@@ -60,7 +60,9 @@ public class SecurityConfig {
                 .hasAnyAuthority(
                     "ROL_ADMIN",
                     "ROL_RESTAURANTE",
-                    "ROL_CLIENTE"
+                    "ROL_CLIENTE",
+                    "ROL_MESERO",
+                    "ROL_CHEF"
                     )
 
                 .requestMatchers("/api/mesas/**")
@@ -84,7 +86,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/platos/**")
                 .hasAnyAuthority(
                     "ROL_ADMIN",
-                    "ROL_RESTAURANTE"
+                    "ROL_RESTAURANTE",
+                    "ROL_MESERO",
+                    "ROL_CHEF"
                     )
 
                 .requestMatchers(HttpMethod.GET, "/api/restaurantes/**").authenticated() // Cualquier usuario logueado con token válido puede leerlo
