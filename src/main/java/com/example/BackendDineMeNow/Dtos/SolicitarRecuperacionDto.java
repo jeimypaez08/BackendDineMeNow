@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SolicitarRecuperacionDto {
     private String correo;
+    private String rol; // Puede ser "CLIENTE" o "RESTAURANTE"
 }

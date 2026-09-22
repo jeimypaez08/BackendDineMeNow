@@ -25,6 +25,7 @@ import com.example.BackendDineMeNow.repositories.EmpleadoRepository;
 import com.example.BackendDineMeNow.repositories.RestauranteRepository;
 import com.example.BackendDineMeNow.repositories.RecuperacionPasswordRepository;
 import com.example.BackendDineMeNow.models.RecuperacionPassword;
+import com.example.BackendDineMeNow.models.Restaurante;
 import com.example.BackendDineMeNow.security.JwtService;
 import com.example.BackendDineMeNow.models.Rol;
 
@@ -193,30 +194,54 @@ public class AuthServiceImpl implements AuthService {
     
     @Override
     public void solicitarRecuperacion(SolicitarRecuperacionDto dto) {
-        String correo = dto.getCorreo() == null ? "" : dto.getCorreo().trim().toLowerCase();
-        if (correo.isBlank()) {
-            throw new IllegalArgumentException("El correo es obligatorio");
+    String correo = dto.getCorreo() == null ? "" : dto.getCorreo().trim().toLowerCase();
+
+    System.out.println(">>> ENTRO A SOLICITAR RECUPERACION");
+    System.out.println(">>> CORREO A BUSCAR: " + correo);
+
+    if (correo.isBlank()) {
+        throw new IllegalArgumentException("El correo es obligatorio");
+    }
+
+    String nombreUsuario = "";
+    boolean usuarioExiste = false;
+
+    // 1. Intentar buscar primero en el repositorio de Cliente
+    Optional<Cliente> clienteOptional = clienteRepo.findByCorreo(correo);
+    if (clienteOptional.isPresent()) {
+        usuarioExiste = true;
+        nombreUsuario = clienteOptional.get().getNombreCliente();
+        System.out.println(">>> ENCONTRADO EN REPOSITORIO CLIENTE: " + nombreUsuario);
+    } else {
+        // 2. Si no es un cliente, buscar en el repositorio de Restaurante
+        System.out.println(">>> NO ES CLIENTE. BUSCANDO EN REPOSITORIO DE RESTAURANTE...");
+        Optional<Restaurante> restauranteOptional = restauranteRepo.findByCorreo(correo);
+        if (restauranteOptional.isPresent()) {
+            usuarioExiste = true;
+            nombreUsuario = restauranteOptional.get().getNombre();
+            System.out.println(">>> ENCONTRADO EN REPOSITORIO RESTAURANTE: " + nombreUsuario);
         }
+    }
 
-        Optional<Cliente> clienteOptional = clienteRepo.findByCorreo(correo);
-        if (clienteOptional.isEmpty()) {
-            // Respuesta genérica para no revelar si un correo está registrado.
-            return;
-        }
+    if (!usuarioExiste) {
+        System.out.println(">>> USUARIO NO EXISTE EN NINGÚN REPOSITORIO. ABORTANDO ENVIO.");
+        return;
+    }
 
-        Cliente cliente = clienteOptional.get();
-        recuperacionRepo.deleteByCorreo(correo);
+    recuperacionRepo.deleteByCorreo(correo);
 
-        String codigo = String.format("%06d", new SecureRandom().nextInt(1_000_000));
+    String codigo = String.format("%06d", new SecureRandom().nextInt(1_000_000));
 
-        RecuperacionPassword recuperacion = RecuperacionPassword.builder()
-                .correo(correo)
-                .codigo(codigo)
-                .fechaCreacion(new Date())
-                .build();
+    RecuperacionPassword recuperacion = RecuperacionPassword.builder()
+            .correo(correo)
+            .codigo(codigo)
+            .fechaCreacion(new Date())
+            .build();
 
-        recuperacionRepo.save(recuperacion);
-        emailService.enviarCodigoRecuperacion(correo, cliente.getNombreCliente(), codigo);
+    recuperacionRepo.save(recuperacion);
+    
+    System.out.println(">>> ENVIANDO CORREO A: " + correo + " CON CODIGO: " + codigo);
+    emailService.enviarCodigoRecuperacion(correo, nombreUsuario, codigo);
     }
 
     @Override
@@ -227,7 +252,11 @@ public class AuthServiceImpl implements AuthService {
         RecuperacionPassword recuperacion = recuperacionRepo.findByCorreoAndCodigo(correo, codigo)
                 .orElseThrow(() -> new IllegalArgumentException("Código incorrecto o ha expirado"));
 
-        if (clienteRepo.findByCorreo(correo).isEmpty()) {
+        // Verificar si el correo pertenece a un cliente o a un restaurante
+        boolean existeCliente = clienteRepo.findByCorreo(correo).isPresent();
+        boolean existeRestaurante = restauranteRepo.findByCorreo(correo).isPresent();
+
+        if (!existeCliente && !existeRestaurante) {
             recuperacionRepo.delete(recuperacion);
             throw new IllegalArgumentException("Usuario no encontrado");
         }
@@ -243,7 +272,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void cambiarPasswordConToken(String resetToken, CambiarPasswordRecuperacionDto dto) {
-        if (dto == null || dto.getPassword() == null || dto.getPassword().isBlank()) {
+       if (dto == null || dto.getPassword() == null || dto.getPassword().isBlank()) {
             throw new IllegalArgumentException("La nueva contraseña es obligatoria");
         }
 
@@ -253,14 +282,30 @@ public class AuthServiceImpl implements AuthService {
 
         String correo = jwtService.validarResetTokenYExtraerCorreo(resetToken);
 
-        Cliente cliente = clienteRepo.findByCorreo(correo)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        // 1. Intentar cambiar la contraseña si es un Cliente
+        Optional<Cliente> clienteOpt = clienteRepo.findByCorreo(correo);
+        if (clienteOpt.isPresent()) {
+            Cliente cliente = clienteOpt.get();
+            ClienteAuth auth = authRepo.findById(cliente.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Credenciales no encontradas para el cliente"));
 
-        ClienteAuth auth = authRepo.findById(cliente.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Credenciales no encontradas para el cliente"));
+            auth.setPass(passwordEncoder.encode(dto.getPassword()));
+            authRepo.save(auth);
+            return; // Termina la ejecución exitosamente
+        }
 
-        auth.setPass(passwordEncoder.encode(dto.getPassword()));
-        authRepo.save(auth);
+        // 2. Intentar cambiar la contraseña si es un Restaurante
+        Optional<Restaurante> restauranteOpt = restauranteRepo.findByCorreo(correo);
+        if (restauranteOpt.isPresent()) {
+            Restaurante restaurante = restauranteOpt.get();
+            
+            restaurante.setPassword(passwordEncoder.encode(dto.getPassword()));
+            restauranteRepo.save(restaurante);
+            return; // Termina la ejecución exitosamente
+        }
+
+        // Si no se encontró en ninguno de los dos
+        throw new IllegalArgumentException("Usuario no encontrado en el sistema");
     
 }
 }

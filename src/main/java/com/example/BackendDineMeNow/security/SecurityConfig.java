@@ -28,6 +28,8 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // Permisos explícitos (Públics)
+                .requestMatchers(HttpMethod.POST, "/api/clientes/registro").permitAll()
                 //rutas publicas
                 .requestMatchers("/api/auth/login",
                                 "/api/auth/recuperar-password/**",
